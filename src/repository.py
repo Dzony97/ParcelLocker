@@ -23,6 +23,23 @@ class CrudRepository[T: Entity]:
         item = self._cursor.fetchone()
         return self._entity_type.from_row(*item) if item else None
 
+    @with_db_connection
+    def insert(self, item: T) -> int:
+        sql = (f'insert into {self._table_name()} '
+               f'({self._column_names_for_insert()}) '
+               f'values ({self._column_values_for_insert(item)})')
+        self._cursor.execute(sql)
+        return self._cursor.lastrowid
+
+    @with_db_connection
+    def insert_many(self, items: list[T]) -> None:
+        if not items:
+            return
+
+        sql = (f'insert into {self._table_name()} ({self._column_names_for_insert()}) '
+               f'values {", ".join(self._values_for_insert_many(items))}')
+        self._cursor.execute(sql)
+
     def _table_name(self) -> str:
         return inflection.underscore(self._entity_type.__name__)
 
