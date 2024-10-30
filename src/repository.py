@@ -15,10 +15,10 @@ class CrudRepository[T: Entity]:
         return inflection.underscore(self._entity_type.__name__)
 
     def _column_names_for_insert(self) -> str:
-        return ', '.join([field for field in self._entity_type.__annotations__.keys()])
+        return ', '.join([field for field in self._entity_type.__annotations__.keys() if field != '_id'])
 
     def _column_values_for_insert(self, item: T) -> str:
-        fields = [field for field in self._entity_type.__annotations__.keys()]
+        fields = [field for field in self._entity_type.__annotations__.keys() if field != '_id']
         values = [
             str(getattr(item, field)) if isinstance(getattr(item, field), (int, float))
             else f"'{getattr(item, field)}'"
