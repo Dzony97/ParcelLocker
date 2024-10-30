@@ -39,6 +39,20 @@ class CrudRepository[T: Entity]:
         sql = (f'insert into {self._table_name()} ({self._column_names_for_insert()}) '
                f'values {", ".join(self._values_for_insert_many(items))}')
         self._cursor.execute(sql)
+        
+    @with_db_connection
+    def update(self, item_id: int, item: T) -> None:
+        sql = f'update {self._table_name()} set {self._column_names_and_values_for_update(item)} where id_ = {item_id}'
+        print('---')
+        print(sql)
+        print('---')
+        self._cursor.execute(sql)
+
+    @with_db_connection
+    def delete(self, item_id: int) -> int:
+        sql = f'delete from {self._table_name()} where id_ = {item_id}'
+        self._cursor.execute(sql)
+        return item_id
 
     def _table_name(self) -> str:
         return inflection.underscore(self._entity_type.__name__)
