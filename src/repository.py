@@ -79,3 +79,24 @@ class CrudRepository[T: Entity]:
 
     def _values_for_insert_many(self, items: list[T]) -> list[str]:
         return [f"({self._column_values_for_insert(item)})" for item in items]
+
+
+
+class ClientRepository(CrudRepository[Client]):
+    def __init__(self, connection_manager: MySQLConnectionManager):
+        super().__init__(connection_manager, Client)
+
+
+class PackageRepository(CrudRepository[Package]):
+    def __init__(self, connection_manager: MySQLConnectionManager):
+        super().__init__(connection_manager, Package)
+
+
+class ParcelLockerRepository(CrudRepository[ParcelLocker]):
+    def __init__(self, connection_manager: MySQLConnectionManager):
+        super().__init__(connection_manager, ParcelLocker)
+
+
+class LockerRepository(CrudRepository[Locker]):
+    def __init__(self, connection_manager: MySQLConnectionManager):
+        super().__init__(connection_manager, Locker)
