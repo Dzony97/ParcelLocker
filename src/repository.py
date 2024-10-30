@@ -10,7 +10,6 @@ class CrudRepository[T: Entity]:
         self._connection_manager = connection_manager
         self._entity_type = entity_type
 
-
     def _table_name(self) -> str:
         return inflection.underscore(self._entity_type.__name__)
 
@@ -33,3 +32,6 @@ class CrudRepository[T: Entity]:
             for field in self._entity_type.__annotations__.keys()
             if field != 'id_'
         ])
+
+    def _values_for_insert_many(self, items: list[T]) -> list[str]:
+        return [f"({self._column_values_for_insert(item)})" for item in items]
