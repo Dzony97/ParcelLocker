@@ -10,6 +10,12 @@ class CrudRepository[T: Entity]:
         self._connection_manager = connection_manager
         self._entity_type = entity_type
 
+    @with_db_connection
+    def find_all(self) -> list[T]:
+        sql = f"SELECT * FROM {self._table_name()}"
+        self._cursor.execute(sql)
+        return [self._entity_type.from_row(*row) for row in self._cursor.fetchall()]
+
     def _table_name(self) -> str:
         return inflection.underscore(self._entity_type.__name__)
 
