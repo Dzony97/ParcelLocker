@@ -11,13 +11,13 @@ INSERT INTO parcel_locker (city, postal_code, latitude, longitude, available_slo
 ('Chicago', '60601', 41.8781, -87.6298, 12);
 
 INSERT INTO locker (parcel_locker_id, client_id, size) VALUES
-(1, 1, 'M'),  -- Locker in San Francisco for John Doe
-(1, 2, 'S'),  -- Locker in San Francisco for Jane Smith
-(2, 3, 'L'),  -- Locker in Los Angeles for Alice Johnson
-(3, 4, 'M'),  -- Locker in New York for Bob Brown
-(2, NULL, 'S');  -- Locker in Los Angeles, available (not assigned to any client)
+(1, 1, 'M'),
+(1, 2, 'S'),
+(2, 3, 'L'),
+(3, 4, 'M'),
+(2, NULL, 'S');
 
 INSERT INTO package (sender_id, receiver_id, parcel_locker_id, locker_id, size, created_at, status) VALUES
-(1, 2, 1, 1, 'M', NOW(), 'Pending'),  -- Package from John to Jane in SF
-(3, 4, 3, 3, 'L', NOW(), 'Delivered'),  -- Package from Alice to Bob in NY
-(2, 1, 2, 2, 'S', NOW(), 'Pending');  -- Package from Jane to John in LA
+(1, 2, 1, 1, 'M', NOW(), 'Pending'),
+(3, 4, 3, 3, 'L', NOW(), 'Delivered'),
+(2, 1, 2, 2, 'S', NOW(), 'Pending');
