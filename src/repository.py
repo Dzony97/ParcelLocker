@@ -16,6 +16,13 @@ class CrudRepository[T: Entity]:
         self._cursor.execute(sql)
         return [self._entity_type.from_row(*row) for row in self._cursor.fetchall()]
 
+    @with_db_connection
+    def find_by_id(self, item_id: int) -> T:
+        sql = f"SELECT * FROM {self._table_name()} where id_ = {item_id}"
+        self._cursor.execute(sql)
+        item = self._cursor.fetchone()
+        return self._entity_type.from_row(*item) if item else None
+
     def _table_name(self) -> str:
         return inflection.underscore(self._entity_type.__name__)
 
