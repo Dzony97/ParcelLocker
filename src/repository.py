@@ -1,7 +1,6 @@
 from src.entity import Entity, Client, Locker, ParcelLocker, Package
 from src.database import with_db_connection, MySQLConnectionManager
 from typing import Type
-
 import inflection
 
 
@@ -43,9 +42,6 @@ class CrudRepository[T: Entity]:
     @with_db_connection
     def update(self, item_id: int, item: T) -> None:
         sql = f'update {self._table_name()} set {self._column_names_and_values_for_update(item)} where id_ = {item_id}'
-        print('---')
-        print(sql)
-        print('---')
         self._cursor.execute(sql)
 
     @with_db_connection
@@ -79,7 +75,6 @@ class CrudRepository[T: Entity]:
 
     def _values_for_insert_many(self, items: list[T]) -> list[str]:
         return [f"({self._column_values_for_insert(item)})" for item in items]
-
 
 
 class ClientRepository(CrudRepository[Client]):

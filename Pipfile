@@ -6,12 +6,14 @@ name = "pypi"
 [packages]
 mysql-connector-python = "*"
 python-dotenv = "*"
+inflection = "*"
 
 [dev-packages]
 pytest = "*"
 pytest-cov = "*"
 testcontainers = "*"
 mypy = "*"
+
 
 [requires]
 python_version = "3.12.4"
