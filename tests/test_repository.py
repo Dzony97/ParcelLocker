@@ -126,5 +126,29 @@ def test_insert_package(package_repository):
     assert retrieved_package.created_at == expected_created_at
 
 
+def test_insert_locker(locker_repository):
+    expected_parcel_locker_id = 1
+    expected_package_id = 1
+    expected_client_id = 1
+    expected_size = 'M'
+
+    locker = Locker(
+        parcel_locker_id=expected_parcel_locker_id,
+        package_id=expected_package_id,
+        client_id=expected_client_id,
+        size=expected_size,
+    )
+
+    locker_id = locker_repository.insert(locker)
+    assert locker_id is not None
+
+    retrieved_locker = locker_repository.find_by_id(locker_id)
+
+    assert retrieved_locker.parcel_locker_id == expected_parcel_locker_id
+    assert retrieved_locker.package_id == expected_package_id
+    assert retrieved_locker.client_id == expected_client_id
+    assert retrieved_locker.size == expected_size
+
+
 
 
