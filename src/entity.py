@@ -72,16 +72,17 @@ class Package(Entity):
     @classmethod
     @override
     def from_row(cls, *args) -> Self:
+        print(f"Row data received in from_row: {args}")
         return cls(
             id_=int(args[0]),
             sender_id=int(args[1]),
             receiver_id=int(args[2]),
             parcel_locker_id=int(args[3]),
             locker_id=int(args[4]),
-            status=args[5],
-            size=args[6],
+            status=args[8],
+            size=args[5],
             delivered_at=args[7],
-            created_at=args[8]
+            created_at=args[6]
         )
 
 

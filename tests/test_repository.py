@@ -91,3 +91,40 @@ def test_insert_parcel_locker(parcel_locker_repository):
     assert retrieved_locker.longitude == expected_longitude
     assert retrieved_locker.available_slots == expected_available_slots
 
+
+def test_insert_package(package_repository):
+    expected_sender_id, expected_receiver_id = 1, 2
+    expected_parcel_locker_id, expected_locker_id = 1, 1
+    expected_status = 'Pending'
+    expected_size = 'L'
+    expected_created_at = datetime(2024, 11, 1, 14, 24, 20)
+    expected_delivered_at = datetime(2024, 12, 1, 14, 24, 20)
+
+    package = Package(
+        sender_id=expected_sender_id,
+        receiver_id=expected_receiver_id,
+        parcel_locker_id=expected_parcel_locker_id,
+        locker_id=expected_locker_id,
+        status=expected_status,
+        size=expected_size,
+        delivered_at=expected_delivered_at,
+        created_at=expected_created_at,
+    )
+
+    package_id = package_repository.insert(package)
+    assert package_id is not None
+
+    retrieved_package = package_repository.find_by_id(package_id)
+
+    assert retrieved_package.sender_id == expected_sender_id
+    assert retrieved_package.receiver_id == expected_receiver_id
+    assert retrieved_package.parcel_locker_id == expected_parcel_locker_id
+    assert retrieved_package.locker_id == expected_locker_id
+    assert retrieved_package.status == expected_status
+    assert retrieved_package.size == expected_size
+    assert retrieved_package.delivered_at == expected_delivered_at
+    assert retrieved_package.created_at == expected_created_at
+
+
+
+
