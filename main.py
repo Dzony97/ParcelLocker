@@ -8,7 +8,6 @@ def main() -> None:
     package_repository = PackageRepository(my_sql_connection_manager)
     client_repository = ClientRepository(my_sql_connection_manager)
     parcel_locker_repository = ParcelLockerRepository(my_sql_connection_manager)
-    print(locker_repository.find_by_id(1))
 
 
 if __name__ == '__main__':
