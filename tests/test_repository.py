@@ -24,20 +24,46 @@ def setup_database_schema(connection_manager) -> None:
 
 
 @pytest.fixture
-def driver_repository(connection_manager) -> ClientRepository:
+def client_repository(connection_manager) -> ClientRepository:
     return ClientRepository(connection_manager)
 
 
 @pytest.fixture
-def offense_repository(connection_manager) -> PackageRepository:
+def package_repository(connection_manager) -> PackageRepository:
     return PackageRepository(connection_manager)
 
 
 @pytest.fixture
-def violation_repository(connection_manager) -> LockerRepository:
+def locker_repository(connection_manager) -> LockerRepository:
     return LockerRepository(connection_manager)
 
 
 @pytest.fixture
-def speed_camera_repository(connection_manager) -> ParcelLockerRepository:
+def parcel_locker_repository(connection_manager) -> ParcelLockerRepository:
     return ParcelLockerRepository(connection_manager)
+
+
+def test_insert_client(client_repository):
+    expected_first_name, expected_last_name = 'Jan', 'Kowalski'
+    expected_email, expected_phone = 'jan.kowalski@example.com', '123456789'
+    expected_latitude, expected_longitude = 52.2297, 21.0122
+
+    client = Client(
+        first_name=expected_first_name,
+        last_name=expected_last_name,
+        email=expected_email,
+        phone_number=expected_phone,
+        latitude=expected_latitude,
+        longitude=expected_longitude
+    )
+    client_id = client_repository.insert(client)
+    assert client_id is not None
+
+    retrieved_client = client_repository.find_by_id(client_id)
+    assert retrieved_client.first_name == expected_first_name
+    assert retrieved_client.last_name == expected_last_name
+    assert retrieved_client.email == expected_email
+    assert retrieved_client.phone_number == expected_phone
+    assert retrieved_client.latitude == expected_latitude
+    assert retrieved_client.longitude == expected_longitude
+

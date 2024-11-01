@@ -16,11 +16,10 @@ class Entity(ABC):
 
 @dataclass
 class Client(Entity):
-    id_: int | None = None
     first_name: str | None = None
     last_name: str | None = None
     email: str | None = None
-    phone: str | None = None
+    phone_number: str | None = None
     latitude: float | None = None
     longitude: float | None = None
 
@@ -32,7 +31,7 @@ class Client(Entity):
             first_name=args[1],
             last_name=args[2],
             email=args[3],
-            phone=args[4],
+            phone_number=args[4],
             latitude=float(args[5]),
             longitude=float(args[6])
         )
@@ -40,7 +39,6 @@ class Client(Entity):
 
 @dataclass
 class ParcelLocker(Entity):
-    id_: int | None = None
     city: str | None = None
     postal_code: str | None = None
     latitude: float | None = None
@@ -62,7 +60,6 @@ class ParcelLocker(Entity):
 
 @dataclass
 class Package(Entity):
-    id_: int | None = None
     sender_id: int | None = None
     receiver_id: int | None = None
     parcel_locker_id: int | None = None
@@ -90,7 +87,6 @@ class Package(Entity):
 
 @dataclass
 class Locker(Entity):
-    id_: int | None = None
     parcel_locker_id: int | None = None
     package_id: int | None = None
     client_id: int | None = None

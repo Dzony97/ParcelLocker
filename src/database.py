@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from mysql.connector import pooling, MySQLConnection
 from typing import Callable, Any
+
 import os
 
 load_dotenv()

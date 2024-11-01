@@ -4,7 +4,7 @@ from src.database import MySQLConnectionManager, with_db_connection
 
 class SqlFileExecutor:
     def __init__(self, connection_manager: MySQLConnectionManager):
-        self.connection_manager = connection_manager
+        self._connection_manager = connection_manager
 
     @with_db_connection
     def execute_sql_file(self, sql_file: str):
