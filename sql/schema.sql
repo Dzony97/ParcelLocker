@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS locker (
     client_id BIGINT,
     package_id BIGINT,
     size VARCHAR(2),
+    status VARCHAR(15),
     FOREIGN KEY (parcel_locker_id) REFERENCES parcel_locker(id_) ON DELETE CASCADE,
     FOREIGN KEY (client_id) REFERENCES client(id_)
 );

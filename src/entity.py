@@ -92,6 +92,7 @@ class Locker(Entity):
     package_id: int | None = None
     client_id: int | None = None
     size: str | None = None
+    status: str | None = None
 
     @classmethod
     @override
@@ -101,5 +102,6 @@ class Locker(Entity):
             parcel_locker_id=int(args[1]),
             package_id=int(args[2]),
             client_id=int(args[3]),
-            size=args[4]
+            size=args[4],
+            status=args[5]
         )

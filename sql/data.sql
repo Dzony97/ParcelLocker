@@ -5,18 +5,18 @@ INSERT INTO client (first_name, last_name, email, phone_number, latitude, longit
 ('Bob', 'Brown', 'bob.brown@example.com', '4444444444', 41.8781, -87.6298);
 
 INSERT INTO parcel_locker (city, postal_code, latitude, longitude, available_slots) VALUES
-('San Francisco', '94103', 37.7749, -122.4194, 10),
-('Los Angeles', '90001', 34.0522, -118.2437, 5),
-('New York', '10001', 40.7128, -74.0060, 8),
+('San Francisco', '94103', 37.7749, -122.4194, 12),
+('Los Angeles', '90001', 34.0522, -118.2437, 12),
+('New York', '10001', 40.7128, -74.0060, 12),
 ('Chicago', '60601', 41.8781, -87.6298, 12);
 
-INSERT INTO locker (parcel_locker_id, client_id, size) VALUES
-(1, NULL, 'S'), (1, NULL, 'S'), (1, NULL, 'M'), (1, NULL, 'M'), (1, NULL, 'L'), (1, NULL, 'L'),
+INSERT INTO locker (parcel_locker_id, client_id, size, status) VALUES
+(1, NULL, 'S', 'Available'), (1, NULL, 'S', 'Available'), (1, NULL, 'M', 'Available'), (1, NULL, 'M', 'Available'), (1, NULL, 'L', 'Available'), (1, NULL, 'L', 'Available'),
 
-(2, NULL, 'S'), (2, NULL, 'S'), (2, NULL, 'M'), (2, NULL, 'M'), (2, NULL, 'L'), (2, NULL, 'L'),
+(2, NULL, 'S', 'Available'), (2, NULL, 'S', 'Available'), (2, NULL, 'M', 'Available'), (2, NULL, 'M', 'Available'), (2, NULL, 'L', 'Available'), (2, NULL, 'L', 'Available'),
 
-(3, NULL, 'S'), (3, NULL, 'S'), (3, NULL, 'M'), (3, NULL, 'M'), (3, NULL, 'L'), (3, NULL, 'L'),
+(3, NULL, 'S', 'Available'), (3, NULL, 'S', 'Available'), (3, NULL, 'M', 'Available'), (3, NULL, 'M', 'Available'), (3, NULL, 'L', 'Available'), (3, NULL, 'L', 'Available'),
 
-(4, NULL, 'S'), (4, NULL, 'S'), (4, NULL, 'M'), (4, NULL, 'M'), (4, NULL, 'L'), (4, NULL, 'L');
+(4, NULL, 'S', 'Available'), (4, NULL, 'S', 'Available'), (4, NULL, 'M', 'Available'), (4, NULL, 'M', 'Available'), (4, NULL, 'L', 'Available'), (4, NULL, 'L', 'Available');
 
 

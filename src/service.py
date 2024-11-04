@@ -34,6 +34,8 @@ class ParcelLockerService:
 
         return sorted(nearest_parcel_lockers, key=lambda x: x["distance_km"])
 
+    def send_package(self, client_id: int, parcel_locker_id: int) -> None:
+        pass
 
 
 
