@@ -1,39 +1,44 @@
-from src.entity import ParcelLocker
+from src.entity import Package
 from src.repository import LockerRepository, ClientRepository, ParcelLockerRepository, PackageRepository
-from geopy.distance import geodesic
-from typing import Callable
 from dataclasses import dataclass
+from src.database import with_db_connection, MySQLConnectionManager
+import math
 
 
 @dataclass
 class ParcelLockerService:
     def __init__(self, locker_repo: LockerRepository, client_repo: ClientRepository, package_repo: PackageRepository,
-                 parcel_locker_repository: ParcelLockerRepository):
+                 parcel_locker_repo: ParcelLockerRepository, connection_manager: MySQLConnectionManager):
         self.locker_repo = locker_repo
         self.client_repo = client_repo
         self.package_repo = package_repo
-        self.parcel_locker_repository = parcel_locker_repository
+        self.parcel_locker_repo = parcel_locker_repo
+        self._connection_manager = connection_manager
 
     def find_client_location(self, client_id: int) -> tuple[float, float]:
         client = self.client_repo.find_by_id(client_id)
         return client.latitude, client.longitude
 
-    def find_nearest_parcel_lockers(self, client_id, max_distance: float) -> list[dict[str, float]]:
-        parcel_lockers = self.parcel_locker_repository.find_all()
-        nearest_parcel_lockers = []
-        client_location = self.find_client_location(client_id)
+    @with_db_connection
+    def find_nearest_parcel_lockers(self, client_id: int, max_distance: float) -> list[tuple[int, ...]]:
+        client_location = self.client_repo.find_by_id(client_id)
 
-        for parcel_locker in parcel_lockers:
-            parcel_locker_location = parcel_locker.latitude, parcel_locker.longitude
-            distance = geodesic(client_location, parcel_locker_location).kilometers
-            if distance < max_distance:
-                nearest_parcel_lockers.append({
-                    "parcel_locker_id": parcel_locker.id_,
-                    "distance_km": distance
-                })
+        table_name = self.parcel_locker_repo.table_name()
 
-        return sorted(nearest_parcel_lockers, key=lambda x: x["distance_km"])
+        sql = (f"SELECT *, "
+               f"(6371.0 * 2 * ASIN(SQRT(POWER(SIN((RADIANS(%s) - RADIANS(latitude)) / 2), 2) + "
+               f"COS(RADIANS(%s)) * COS(RADIANS(latitude)) * "
+               f"POWER(SIN((RADIANS(%s) - RADIANS(longitude)) / 2), 2)))) AS distance "
+               f"FROM {table_name} "
+               f"WHERE (6371.0 * 2 * ASIN(SQRT(POWER(SIN((RADIANS(%s) - RADIANS(latitude)) / 2), 2) + "
+               f"COS(RADIANS(%s)) * COS(RADIANS(latitude)) * "
+               f"POWER(SIN((RADIANS(%s) - RADIANS(longitude)) / 2), 2)))) < %s "
+               f"ORDER BY distance;")
 
-
+        self._cursor.execute(sql, (client_location.latitude, client_location.latitude, client_location.longitude,
+                                   client_location.latitude, client_location.latitude, client_location.longitude,
+                                   max_distance))
+        result = self._cursor.fetchall()
+        return [(int(row[0]), row[6]) for row in result]
 
 

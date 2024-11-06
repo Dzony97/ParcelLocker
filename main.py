@@ -10,8 +10,9 @@ def main() -> None:
     client_repository = ClientRepository(my_sql_connection_manager)
     parcel_locker_repository = ParcelLockerRepository(my_sql_connection_manager)
     parcel_locker_service = ParcelLockerService(locker_repository, client_repository,
-                                                package_repository, parcel_locker_repository)
-    print(parcel_locker_service.find_nearest_parcel_lockers(2, 90000))
+                                                package_repository, parcel_locker_repository, my_sql_connection_manager)
+
+    print(parcel_locker_service.find_nearest_parcel_lockers(1, 1000))
 
 
 if __name__ == '__main__':
