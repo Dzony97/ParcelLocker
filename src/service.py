@@ -22,7 +22,6 @@ class ParcelLockerService:
     @with_db_connection
     def find_nearest_parcel_lockers(self, client_id: int, max_distance: float) -> list[tuple[int, ...]]:
         client_location = self.client_repo.find_by_id(client_id)
-
         table_name = self.parcel_locker_repo.table_name()
 
         sql = (f"SELECT *, "
