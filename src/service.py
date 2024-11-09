@@ -24,20 +24,17 @@ class ParcelLockerService:
         client_location = self.client_repo.find_by_id(client_id)
         table_name = self.parcel_locker_repo.table_name()
 
-        sql = (f"SELECT *, "
+        sql = (f"WITH DistanceCalc AS ( "
+               f"SELECT {table_name}.id_, {table_name}.city, "
                f"(6371.0 * 2 * ASIN(SQRT(POWER(SIN((RADIANS(%s) - RADIANS(latitude)) / 2), 2) + "
                f"COS(RADIANS(%s)) * COS(RADIANS(latitude)) * "
                f"POWER(SIN((RADIANS(%s) - RADIANS(longitude)) / 2), 2)))) AS distance "
-               f"FROM {table_name} "
-               f"WHERE (6371.0 * 2 * ASIN(SQRT(POWER(SIN((RADIANS(%s) - RADIANS(latitude)) / 2), 2) + "
-               f"COS(RADIANS(%s)) * COS(RADIANS(latitude)) * "
-               f"POWER(SIN((RADIANS(%s) - RADIANS(longitude)) / 2), 2)))) < %s "
+               f"FROM {table_name} ) SELECT id_, city, distance FROM DistanceCalc WHERE distance < %s "
                f"ORDER BY distance;")
 
         self._cursor.execute(sql, (client_location.latitude, client_location.latitude, client_location.longitude,
-                                   client_location.latitude, client_location.latitude, client_location.longitude,
                                    max_distance))
         result = self._cursor.fetchall()
-        return [(int(row[0]), row[6]) for row in result]
+        return sorted(result, key=lambda x: x[2])
 
 
