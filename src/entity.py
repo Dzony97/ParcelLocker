@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from abc import ABC, abstractmethod
 from typing import Self, override
+from enum import Enum
 
 
 @dataclass
@@ -105,3 +106,9 @@ class Locker(Entity):
             size=args[4],
             status=args[5]
         )
+
+
+class Size(Enum):
+    S = 'S'
+    M = 'M'
+    L = 'L'
