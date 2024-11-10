@@ -68,8 +68,8 @@ class CrudRepository[T: Entity]:
 
     def _column_names_and_values_for_update(self, item: T) -> str:
         return ', '.join([
-            f"{field} = {str(getattr(item, field)) if isinstance(getattr(item, field), (int, float))
-            else f"'{getattr(item, field)}'"}"
+            f"{field} = {('NULL' if getattr(item, field) is None else str(getattr(item, field)) if isinstance(getattr(item, field), (int, float))
+            else f"'{getattr(item, field)}'")}"
             for field in self._entity_type.__annotations__.keys()
             if field != 'id_'
         ])
