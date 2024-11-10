@@ -4,11 +4,11 @@ INSERT INTO client (first_name, last_name, email, phone_number, latitude, longit
 ('Alice', 'Johnson', 'alice.johnson@example.com', '5555555555', 40.7128, -74.0060),
 ('Bob', 'Brown', 'bob.brown@example.com', '4444444444', 41.8781, -87.6298);
 
-INSERT INTO parcel_locker (city, postal_code, latitude, longitude, available_slots) VALUES
-('San Francisco', '94103', 37.7749, -122.4194, 12),
-('Los Angeles', '90001', 34.0522, -118.2437, 12),
-('New York', '10001', 40.7128, -74.0060, 12),
-('Chicago', '60601', 41.8781, -87.6298, 12);
+INSERT INTO parcel_locker (city, postal_code, latitude, longitude) VALUES
+('San Francisco', '94103', 37.7749, -122.4194),
+('Los Angeles', '90001', 34.0522, -118.2437),
+('New York', '10001', 40.7128, -74.0060),
+('Chicago', '60601', 41.8781, -87.6298);
 
 INSERT INTO locker (parcel_locker_id, client_id, size, status) VALUES
 (1, NULL, 'S', 'Available'), (1, NULL, 'S', 'Available'), (1, NULL, 'M', 'Available'), (1, NULL, 'M', 'Available'), (1, NULL, 'L', 'Available'), (1, NULL, 'L', 'Available'),

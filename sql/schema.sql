@@ -13,17 +13,16 @@ CREATE TABLE IF NOT EXISTS parcel_locker (
     city VARCHAR(55) NOT NULL,
     postal_code VARCHAR(6) NOT NULL,
     latitude float NOT NULL,
-    longitude float NOT NULL,
-    available_slots INT NOT NULL
+    longitude float NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS locker (
     id_ BIGINT AUTO_INCREMENT PRIMARY KEY,
     parcel_locker_id BIGINT NOT NULL,
-    client_id BIGINT,
-    package_id BIGINT,
+    client_id BIGINT NULL DEFAULT NULL,
+    package_id BIGINT NULL DEFAULT NULL,
     size VARCHAR(2),
-    status VARCHAR(15),
+    status VARCHAR(15) DEFAULT 'Available',
     FOREIGN KEY (parcel_locker_id) REFERENCES parcel_locker(id_) ON DELETE CASCADE,
     FOREIGN KEY (client_id) REFERENCES client(id_)
 );
@@ -33,10 +32,10 @@ CREATE TABLE IF NOT EXISTS package (
     sender_id BIGINT NOT NULL,
     receiver_id BIGINT NOT NULL,
     parcel_locker_id BIGINT NOT NULL,
-    locker_id BIGINT NOT NULL,
+    locker_id BIGINT NULL,
     size VARCHAR(2) NOT NULL,
     created_at DATETIME NOT NULL,
-    delivered_at DATETIME DEFAULT NULL,
+    delivered_at DATETIME NULL DEFAULT NULL,
     status VARCHAR(55),
     FOREIGN KEY (sender_id) REFERENCES client(id_),
     FOREIGN KEY (receiver_id) REFERENCES client(id_),

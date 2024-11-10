@@ -6,7 +6,6 @@ from dataclasses import dataclass
 from datetime import datetime
 
 
-
 @dataclass
 class ParcelLockerService:
     def __init__(self, locker_repo: LockerRepository, client_repo: ClientRepository, package_repo: PackageRepository,
@@ -75,4 +74,23 @@ class ParcelLockerService:
                 self.locker_repo.update(locker_to_use.id_, locker_to_use)
                 return package
         raise ValueError("No available slots found")
+
+    def receive_package(self, package_id: int) -> None:
+        package = self.package_repo.find_by_id(package_id)
+        locker_to_use = self.locker_repo.find_by_id(package.locker_id)
+
+        if not package:
+            raise ValueError("No package found")
+        if not locker_to_use:
+            raise ValueError("No locker_to_use found")
+
+        package.status = "Received"
+        package.delivered_at = datetime.now()
+        self.package_repo.update(package_id, package)
+
+        locker_to_use.status = "Available"
+        locker_to_use.package_id = None
+        locker_to_use.client_id = None
+        self.locker_repo.update(locker_to_use.id_, locker_to_use)
+
 

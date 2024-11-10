@@ -12,8 +12,8 @@ def main() -> None:
     parcel_locker_repository = ParcelLockerRepository(my_sql_connection_manager)
     parcel_locker_service = ParcelLockerService(locker_repository, client_repository,
                                                 package_repository, parcel_locker_repository, my_sql_connection_manager)
-    print(parcel_locker_service.find_nearest_parcel_lockers(1, 600))
-    print(parcel_locker_service.send_package(1, 3, 9600, Size.S.value))
+    # parcel_locker_service.send_package(1, 2, 9000, Size.S.value)
+    parcel_locker_service.receive_package(1)
 
 
 if __name__ == '__main__':
