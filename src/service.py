@@ -1,8 +1,10 @@
-from src.entity import Package
 from src.repository import LockerRepository, ClientRepository, ParcelLockerRepository, PackageRepository
-from dataclasses import dataclass
 from src.database import with_db_connection, MySQLConnectionManager
-import math
+from src.entity import Package
+from enum import Enum
+from dataclasses import dataclass
+from datetime import datetime
+
 
 
 @dataclass
@@ -18,6 +20,17 @@ class ParcelLockerService:
     def find_client_location(self, client_id: int) -> tuple[float, float]:
         client = self.client_repo.find_by_id(client_id)
         return client.latitude, client.longitude
+
+    @with_db_connection
+    def has_available_slots(self, size: Enum, parcel_locker: int) -> list[int]:
+        table_name = self.locker_repo.table_name()
+
+        sql = (f"SELECT {table_name}.id_ FROM {table_name} WHERE {table_name}.parcel_locker_id = %s "
+               f"AND {table_name}.size = %s AND {table_name}.status = 'Available';")
+
+        self._cursor.execute(sql, (parcel_locker, size))
+        result = self._cursor.fetchall()
+        return [row[0] for row in result]
 
     @with_db_connection
     def find_nearest_parcel_lockers(self, client_id: int, max_distance: float) -> list[tuple[int, ...]]:
@@ -37,4 +50,29 @@ class ParcelLockerService:
         result = self._cursor.fetchall()
         return sorted(result, key=lambda x: x[2])
 
+    def send_package(self, client_id: int, receiver_id: int, max_distance: float, size: Enum) -> int:
+        parcel_lockers = self.find_nearest_parcel_lockers(client_id, max_distance)
+        if not parcel_lockers:
+            raise ValueError("No parcel lockers found")
+
+        for parcel_locker in parcel_lockers:
+            available_slots = self.has_available_slots(size, parcel_locker[0])
+            if available_slots:
+                package = Package(
+                    sender_id=client_id,
+                    receiver_id=receiver_id,
+                    parcel_locker_id=parcel_locker[0],
+                    locker_id=available_slots[0],
+                    status="In locker",
+                    size=str(size),
+                    created_at=datetime.now(),
+                    delivered_at=datetime.now()
+                )
+                package = self.package_repo.insert(package)
+                locker_to_use = self.locker_repo.find_by_id(available_slots[0])
+                locker_to_use.status, locker_to_use.package_id, locker_to_use.client_id \
+                    = "Occupied", package, receiver_id
+                self.locker_repo.update(locker_to_use.id_, locker_to_use)
+                return package
+        raise ValueError("No available slots found")
 

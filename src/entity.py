@@ -101,8 +101,8 @@ class Locker(Entity):
         return cls(
             id_=int(args[0]),
             parcel_locker_id=int(args[1]),
-            package_id=int(args[2]),
-            client_id=int(args[3]),
+            package_id=int(args[2]) if args[2] is not None else None,
+            client_id=int(args[3]) if args[3] is not None else None,
             size=args[4],
             status=args[5]
         )
