@@ -82,7 +82,7 @@ class Package(Entity):
             locker_id=int(args[4]),
             status=args[8],
             size=args[5],
-            delivered_at=args[7] if args[7] is not None else None,
+            delivered_at=args[7],
             created_at=args[6]
         )
 

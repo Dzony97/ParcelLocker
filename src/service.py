@@ -64,8 +64,7 @@ class ParcelLockerService:
                     locker_id=available_slots[0],
                     status="In locker",
                     size=str(size),
-                    created_at=datetime.now(),
-                    delivered_at=datetime.now()
+                    created_at=datetime.now()
                 )
                 package = self.package_repo.insert(package)
                 locker_to_use = self.locker_repo.find_by_id(available_slots[0])

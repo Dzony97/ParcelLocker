@@ -59,6 +59,7 @@ class CrudRepository[T: Entity]:
     def _column_values_for_insert(self, item: T) -> str:
         fields = [field for field in self._entity_type.__annotations__.keys() if field != '_id']
         values = [
+            "NULL" if getattr(item, field) is None else
             str(getattr(item, field)) if isinstance(getattr(item, field), (int, float))
             else f"'{getattr(item, field)}'"
             for field in fields
