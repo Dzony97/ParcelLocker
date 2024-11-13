@@ -44,7 +44,6 @@ class ParcelLocker(Entity):
     postal_code: str | None = None
     latitude: float | None = None
     longitude: float | None = None
-    available_slots: int | None = None
 
     @classmethod
     @override
@@ -54,8 +53,7 @@ class ParcelLocker(Entity):
             city=args[1],
             postal_code=args[2],
             latitude=float(args[3]),
-            longitude=float(args[4]),
-            available_slots=int(args[5])
+            longitude=float(args[4])
         )
 
 
