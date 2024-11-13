@@ -1,8 +1,7 @@
 import pytest
 from src.service import ParcelLockerService
 from src.repository import LockerRepository, ClientRepository, PackageRepository, ParcelLockerRepository
-from src.database import MySQLConnectionManager
-
+from src.entity import Size
 
 @pytest.fixture
 def parcel_locker_service(connection_manager) -> ParcelLockerService:
@@ -23,6 +22,11 @@ def parcel_locker_service(connection_manager) -> ParcelLockerService:
 def test_find_client_location(parcel_locker_service):
     client_location = parcel_locker_service.find_client_location(5)
     assert client_location == (52.2297, 21.0122)
+
+
+def test_has_available_slots(parcel_locker_service):
+    excepted_available_slots = parcel_locker_service.has_available_slots(Size.S.value, 1)
+    assert excepted_available_slots == [1, 2]
 
 
 
