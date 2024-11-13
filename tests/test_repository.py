@@ -4,6 +4,7 @@ import pytest
 from datetime import datetime
 from tests.conftest import connection_manager
 
+
 @pytest.fixture
 def client_repository(connection_manager) -> ClientRepository:
     return ClientRepository(connection_manager)
