@@ -19,3 +19,5 @@ def connection_manager() -> MySQLConnectionManager:
 def setup_database_schema(connection_manager) -> None:
     executor = SqlFileExecutor(connection_manager)
     executor.execute_sql_file(os.path.join(os.path.dirname(__file__), '../sql/schema.sql'))
+
+

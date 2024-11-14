@@ -77,7 +77,7 @@ class Package(Entity):
             sender_id=int(args[1]),
             receiver_id=int(args[2]),
             parcel_locker_id=int(args[3]),
-            locker_id=int(args[4]),
+            locker_id=int(args[4]) if args[4] is not None else None,
             status=args[8],
             size=args[5],
             delivered_at=args[7],

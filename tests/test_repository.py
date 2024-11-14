@@ -51,8 +51,8 @@ def test_insert_client(client_repository):
 
 
 def test_insert_parcel_locker(parcel_locker_repository):
-    expected_city, expected_postal_code = 'Warsaw', '00-001'
-    expected_latitude, expected_longitude = 52.2297, 21.0122
+    expected_city, expected_postal_code = 'San Francisco', '94103'
+    expected_latitude, expected_longitude = 37.7749, -122.419
 
     parcel_locker = ParcelLocker(
         city=expected_city,
@@ -70,11 +70,37 @@ def test_insert_parcel_locker(parcel_locker_repository):
     assert retrieved_locker.longitude == expected_longitude
 
 
+def test_insert_locker(locker_repository):
+    expected_parcel_locker_id = 1
+    expected_package_id = None
+    expected_client_id = None
+    expected_size = 'S'
+    excepted_status = 'Available'
+
+    locker = Locker(
+        parcel_locker_id=expected_parcel_locker_id,
+        package_id=expected_package_id,
+        client_id=expected_client_id,
+        size=expected_size,
+        status=excepted_status
+    )
+    locker_id = locker_repository.insert(locker)
+    assert locker_id is not None
+
+    retrieved_locker = locker_repository.find_by_id(locker_id)
+
+    assert retrieved_locker.parcel_locker_id == expected_parcel_locker_id
+    assert retrieved_locker.package_id == expected_package_id
+    assert retrieved_locker.client_id == expected_client_id
+    assert retrieved_locker.size == expected_size
+    assert retrieved_locker.status == excepted_status
+
+
 def test_insert_package(package_repository):
-    expected_sender_id, expected_receiver_id = 1, 2
-    expected_parcel_locker_id, expected_locker_id = 1, 1
+    expected_sender_id, expected_receiver_id = 1, 1
+    expected_parcel_locker_id, expected_locker_id = 1, None
     expected_status = 'Pending'
-    expected_size = 'L'
+    expected_size = 'S'
     expected_created_at = datetime(2024, 11, 1, 14, 24, 20)
     expected_delivered_at = datetime(2024, 12, 1, 14, 24, 20)
 
@@ -104,30 +130,7 @@ def test_insert_package(package_repository):
     assert retrieved_package.created_at == expected_created_at
 
 
-def test_insert_locker(locker_repository):
-    expected_parcel_locker_id = 1
-    expected_package_id = 1
-    expected_client_id = 1
-    expected_size = 'M'
-    excepted_status = 'Available'
 
-    locker = Locker(
-        parcel_locker_id=expected_parcel_locker_id,
-        package_id=expected_package_id,
-        client_id=expected_client_id,
-        size=expected_size,
-        status=excepted_status
-    )
-    locker_id = locker_repository.insert(locker)
-    assert locker_id is not None
-
-    retrieved_locker = locker_repository.find_by_id(locker_id)
-
-    assert retrieved_locker.parcel_locker_id == expected_parcel_locker_id
-    assert retrieved_locker.package_id == expected_package_id
-    assert retrieved_locker.client_id == expected_client_id
-    assert retrieved_locker.size == expected_size
-    assert retrieved_locker.status == excepted_status
 
 
 
