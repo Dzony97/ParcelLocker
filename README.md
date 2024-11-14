@@ -9,12 +9,15 @@
 ## Description
 ParcelLocker is a Python-based application that leverages MySQL for database management to streamline package delivery and pickup. This application enables users to send and receive packages conveniently, as well as locate the nearest available parcel lockers, making logistics simpler and more accessible
 
-## Setup
-
-To set up the project locally, follow these steps.
-
 ### Requirements
 
 - Python 3.12.4
-- Virtual environment (optional but recommended)
+- Docker (for Docker Compose)
+- Pipenv (for dependency management)
+
+### Steps to Set Up
+
+1. **Clone the Repository**
+
+
 
