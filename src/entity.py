@@ -7,16 +7,33 @@ from enum import Enum
 
 @dataclass
 class Entity(ABC):
+    """
+    Abstract base class for all entities in the system.
+
+    Provides a common structure for entities, including an optional ID field and
+    an abstract method for creating instances from database rows.
+    """
     id_: int | None = None
 
     @classmethod
     @abstractmethod
     def from_row(cls, *args) -> Self:
+        """
+        Abstract method to construct an entity instance from a database row.
+
+        :param args: The row data from the database.
+        :return: An instance of the entity.
+        """
         pass
 
 
 @dataclass
 class Client(Entity):
+    """
+    Represents a client in the system.
+
+    Stores client information including name, contact details, and geographical location.
+    """
     first_name: str | None = None
     last_name: str | None = None
     email: str | None = None
@@ -27,6 +44,12 @@ class Client(Entity):
     @classmethod
     @override
     def from_row(cls, *args) -> Self:
+        """
+        Creates a Client instance from a database row.
+
+        :param args: The row data from the database.
+        :return: A Client instance.
+        """
         return cls(
             id_=int(args[0]),
             first_name=args[1],
@@ -40,6 +63,11 @@ class Client(Entity):
 
 @dataclass
 class ParcelLocker(Entity):
+    """
+    Represents a parcel locker in the system.
+
+    Stores information about the location of the parcel locker.
+    """
     city: str | None = None
     postal_code: str | None = None
     latitude: float | None = None
@@ -48,6 +76,12 @@ class ParcelLocker(Entity):
     @classmethod
     @override
     def from_row(cls, *args) -> Self:
+        """
+        Creates a ParcelLocker instance from a database row.
+
+        :param args: The row data from the database.
+        :return: A ParcelLocker instance.
+        """
         return cls(
             id_=int(args[0]),
             city=args[1],
@@ -59,6 +93,11 @@ class ParcelLocker(Entity):
 
 @dataclass
 class Package(Entity):
+    """
+    Represents a package in the system.
+
+    Stores information about the package sender, receiver, locker, status, size, and timestamps.
+    """
     sender_id: int | None = None
     receiver_id: int | None = None
     parcel_locker_id: int | None = None
@@ -71,6 +110,12 @@ class Package(Entity):
     @classmethod
     @override
     def from_row(cls, *args) -> Self:
+        """
+        Creates a Package instance from a database row.
+
+        :param args: The row data from the database.
+        :return: A Package instance.
+        """
         print(f"Row data received in from_row: {args}")
         return cls(
             id_=int(args[0]),
@@ -87,6 +132,11 @@ class Package(Entity):
 
 @dataclass
 class Locker(Entity):
+    """
+    Represents a locker in a parcel locker system.
+
+    Stores information about the locker, including its associated parcel locker, package, size, and status.
+    """
     parcel_locker_id: int | None = None
     package_id: int | None = None
     client_id: int | None = None
@@ -96,6 +146,12 @@ class Locker(Entity):
     @classmethod
     @override
     def from_row(cls, *args) -> Self:
+        """
+        Creates a Locker instance from a database row.
+
+        :param args: The row data from the database.
+        :return: A Locker instance.
+        """
         return cls(
             id_=int(args[0]),
             parcel_locker_id=int(args[1]),
@@ -107,6 +163,10 @@ class Locker(Entity):
 
 
 class Size(Enum):
+    """
+    Enum representing the sizes of lockers available in the parcel locker system.
+    """
     S = 'S'
     M = 'M'
     L = 'L'
+

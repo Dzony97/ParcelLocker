@@ -7,25 +7,57 @@ from tests.conftest import connection_manager
 
 @pytest.fixture
 def client_repository(connection_manager) -> ClientRepository:
+    """
+    Fixture to create and provide a `ClientRepository` instance for tests.
+
+    :param connection_manager: The connection manager used to interact with the database.
+    :return: A `ClientRepository` instance for performing database operations on `Client` entities.
+    """
     return ClientRepository(connection_manager)
 
 
 @pytest.fixture
 def package_repository(connection_manager) -> PackageRepository:
+    """
+    Fixture to create and provide a `PackageRepository` instance for tests.
+
+    :param connection_manager: The connection manager used to interact with the database.
+    :return: A `PackageRepository` instance for performing database operations on `Package` entities.
+    """
     return PackageRepository(connection_manager)
 
 
 @pytest.fixture
 def locker_repository(connection_manager) -> LockerRepository:
+    """
+    Fixture to create and provide a `LockerRepository` instance for tests.
+
+    :param connection_manager: The connection manager used to interact with the database.
+    :return: A `LockerRepository` instance for performing database operations on `Locker` entities.
+    """
     return LockerRepository(connection_manager)
 
 
 @pytest.fixture
 def parcel_locker_repository(connection_manager) -> ParcelLockerRepository:
+    """
+    Fixture to create and provide a `ParcelLockerRepository` instance for tests.
+
+    :param connection_manager: The connection manager used to interact with the database.
+    :return: A `ParcelLockerRepository` instance for performing database operations on `ParcelLocker` entities.
+    """
     return ParcelLockerRepository(connection_manager)
 
 
 def test_insert_client(client_repository):
+    """
+    Test to verify the insertion and retrieval of a `Client` entity.
+
+    The test creates a `Client` object, inserts it into the database using the
+    repository, and then verifies the data by fetching it back from the database.
+
+    :param client_repository: The repository used to perform database operations on `Client` entities.
+    """
     expected_first_name, expected_last_name = 'Jan', 'Nowakk'
     expected_email, expected_phone = 'jan@example.com', '232546789'
     expected_latitude, expected_longitude = 52.2297, 21.0122
@@ -51,6 +83,14 @@ def test_insert_client(client_repository):
 
 
 def test_insert_parcel_locker(parcel_locker_repository):
+    """
+    Test to verify the insertion and retrieval of a `ParcelLocker` entity.
+
+    The test creates a `ParcelLocker` object, inserts it into the database using
+    the repository, and then verifies the data by fetching it back from the database.
+
+    :param parcel_locker_repository: The repository used to perform database operations on `ParcelLocker` entities.
+    """
     expected_city, expected_postal_code = 'San Francisco', '94103'
     expected_latitude, expected_longitude = 37.7749, -122.419
 
@@ -71,6 +111,14 @@ def test_insert_parcel_locker(parcel_locker_repository):
 
 
 def test_insert_locker(locker_repository):
+    """
+    Test to verify the insertion and retrieval of a `Locker` entity.
+
+    The test creates a `Locker` object, inserts it into the database using
+    the repository, and then verifies the data by fetching it back from the database.
+
+    :param locker_repository: The repository used to perform database operations on `Locker` entities.
+    """
     expected_parcel_locker_id = 1
     expected_package_id = None
     expected_client_id = None
@@ -97,6 +145,14 @@ def test_insert_locker(locker_repository):
 
 
 def test_insert_package(package_repository):
+    """
+    Test to verify the insertion and retrieval of a `Package` entity.
+
+    The test creates a `Package` object, inserts it into the database using
+    the repository, and then verifies the data by fetching it back from the database.
+
+    :param package_repository: The repository used to perform database operations on `Package` entities.
+    """
     expected_sender_id, expected_receiver_id = 1, 1
     expected_parcel_locker_id, expected_locker_id = 1, None
     expected_status = 'Pending'
@@ -128,6 +184,7 @@ def test_insert_package(package_repository):
     assert retrieved_package.size == expected_size
     assert retrieved_package.delivered_at == expected_delivered_at
     assert retrieved_package.created_at == expected_created_at
+
 
 
 
