@@ -19,5 +19,32 @@ ParcelLocker is a Python-based application that leverages MySQL for database man
 
 1. **Clone the Repository**
 
+Clone the repository to your local machine:
+```bash
+git clone https://github.com/Dzony97/ParcelLocker.git
+```
 
+2. **Set Up a Virtual Environment**
 
+Open Command Prompt or PowerShell.
+Navigate to your project directory.
+Run the following commands:
+```bash
+pip install pipenv
+pipenv shell
+pipenv install
+```
+
+3. **Build and Run with Docker Compose**
+   
+Use Docker Compose to build and run the project:
+```bash
+docker-compose up --build
+```
+
+4. **Run the Application**
+
+If the project requires running a main function, execute it:
+```bash
+piprnv run python main.py
+```
