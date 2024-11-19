@@ -97,13 +97,10 @@ def test_receive_package(parcel_locker_service):
     package = parcel_locker_service.package_repo.find_by_id(2)
     locker = parcel_locker_service.locker_repo.find_by_id(package.locker_id)
 
-    # Assert package status is updated to "Received"
     assert package.status == "Received"
 
-    # Assert delivered_at is correctly set to the current time, without microseconds
     assert package.delivered_at.replace(microsecond=0) == datetime.now().replace(microsecond=0)
 
-    # Assert locker status is updated to "Available"
     assert locker.status == "Available"
 
 

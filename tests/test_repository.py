@@ -187,7 +187,9 @@ def test_insert_package(package_repository):
 
 
 def test_find_all(client_repository):
-    excepted_result = [Client(id_=1, first_name='Jan', last_name='Nowakk', email='jan@example.com', phone_number='232546789', latitude=52.2297, longitude=21.0122)]
+    excepted_result = [
+        Client(id_=1, first_name='Jan', last_name='Nowakk', email='jan@example.com', phone_number='232546789',
+               latitude=52.2297, longitude=21.0122)]
     assert client_repository.find_all() == excepted_result
 
 
@@ -195,8 +197,50 @@ def test_delete(package_repository):
     assert package_repository.delete(1) == 1
 
 
+def test_insert_many(client_repository):
+    """
+    Test to verify the insertion of multiple `Client` entities using `insert_many`.
 
+    The test creates multiple `Client` objects, inserts them into the database using the
+    repository, and then verifies the data by fetching them back.
+    """
+    client1 = Client(
+        first_name="Alice",
+        last_name="Johnson",
+        email="alice.johnson@example.com",
+        phone_number="123451234",
+        latitude=45.0,
+        longitude=-93.0,
+    )
+    client2 = Client(
+        first_name="Patr",
+        last_name="Johnson",
+        email="patr.johnson@example.com",
+        phone_number="12345428",
+        latitude=45.0,
+        longitude=-93.0,
+    )
 
+    client_repository.insert_many([client1, client2])
 
+    all_clients = client_repository.find_all()
+    assert len(all_clients) >= 2
 
+    alice = next((c for c in all_clients if c.email == "alice.johnson@example.com"), None)
+    patr = next((c for c in all_clients if c.email == "patr.johnson@example.com"), None)
+
+    assert alice is not None
+    assert patr is not None
+
+    assert alice.first_name == "Alice"
+    assert alice.last_name == "Johnson"
+    assert alice.phone_number == "123451234"
+    assert alice.latitude == 45.0
+    assert alice.longitude == -93.0
+
+    assert patr.first_name == "Patr"
+    assert patr.last_name == "Johnson"
+    assert patr.phone_number == "12345428"
+    assert patr.latitude == 45.0
+    assert patr.longitude == -93.0
 
