@@ -186,6 +186,15 @@ def test_insert_package(package_repository):
     assert retrieved_package.created_at == expected_created_at
 
 
+def test_find_all(client_repository):
+    excepted_result = [Client(id_=1, first_name='Jan', last_name='Nowakk', email='jan@example.com', phone_number='232546789', latitude=52.2297, longitude=21.0122)]
+    assert client_repository.find_all() == excepted_result
+
+
+def test_delete(package_repository):
+    assert package_repository.delete(1) == 1
+
+
 
 
 
