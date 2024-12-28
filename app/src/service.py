@@ -1,5 +1,5 @@
 from src.repository import LockerRepository, ClientRepository, ParcelLockerRepository, PackageRepository
-from src.database import with_db_connection, MySQLConnectionManager
+from src.database import MySQLConnectionManager
 from src.entity import Package
 from enum import Enum
 from dataclasses import dataclass
@@ -42,49 +42,6 @@ class ParcelLockerService:
         client = self.client_repo.find_by_id(client_id)
         return client.latitude, client.longitude
 
-    @with_db_connection
-    def has_available_slots(self, size: Enum, parcel_locker: int) -> list[int]:
-        """
-        Checks for available slots in a parcel locker of a specified size.
-
-        :param size: Size of the locker (e.g., small, medium, large).
-        :param parcel_locker: The ID of the parcel locker to check.
-        :return: A list of locker IDs with available slots.
-        """
-        table_name = self.locker_repo.table_name()
-
-        sql = (f"SELECT {table_name}.id_ FROM {table_name} WHERE {table_name}.parcel_locker_id = %s "
-               f"AND {table_name}.size = %s AND {table_name}.status = 'Available';")
-
-        self._cursor.execute(sql, (parcel_locker, size))
-        result = self._cursor.fetchall()
-        return [row[0] for row in result]
-
-    @with_db_connection
-    def find_nearest_parcel_lockers(self, client_id: int, max_distance: float) -> list[tuple[int, ...]]:
-        """
-        Finds the nearest parcel lockers within a specified maximum distance.
-
-        :param client_id: The ID of the client.
-        :param max_distance: The maximum distance to search for parcel lockers (in kilometers).
-        :return: A list of tuples, each containing the ID, city, and distance of a parcel locker.
-        """
-        client_location = self.client_repo.find_by_id(client_id)
-        table_name = self.parcel_locker_repo.table_name()
-
-        sql = (f"WITH DistanceCalc AS ( "
-               f"SELECT {table_name}.id_, {table_name}.city, "
-               f"(6371.0 * 2 * ASIN(SQRT(POWER(SIN((RADIANS(%s) - RADIANS(latitude)) / 2), 2) + "
-               f"COS(RADIANS(%s)) * COS(RADIANS(latitude)) * "
-               f"POWER(SIN((RADIANS(%s) - RADIANS(longitude)) / 2), 2)))) AS distance "
-               f"FROM {table_name} ) SELECT id_, city, distance FROM DistanceCalc WHERE distance < %s "
-               f"ORDER BY distance;")
-
-        self._cursor.execute(sql, (client_location.latitude, client_location.latitude, client_location.longitude,
-                                   max_distance))
-        result = self._cursor.fetchall()
-        return sorted(result, key=lambda x: x[2])
-
     def send_package(self, client_id: int, receiver_id: int, max_distance: float, size: Enum) -> Package:
         """
         Sends a package to the nearest parcel locker with available slots.
@@ -96,12 +53,12 @@ class ParcelLockerService:
         :return: The created Package instance.
         :raises ValueError: If no parcel lockers or available slots are found.
         """
-        parcel_lockers = self.find_nearest_parcel_lockers(client_id, max_distance)
+        parcel_lockers = self.parcel_locker_repo.find_nearest_parcel_lockers(client_id, max_distance)
         if not parcel_lockers:
             raise ValueError("No parcel lockers found")
 
         for parcel_locker in parcel_lockers:
-            available_slots = self.has_available_slots(size, parcel_locker[0])
+            available_slots = self.locker_repo.has_available_slots(size, parcel_locker[0])
             if available_slots:
                 package = Package(
                     sender_id=client_id,
