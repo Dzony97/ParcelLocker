@@ -1,5 +1,5 @@
 from mysql.connector import Error
-from src.database import MySQLConnectionManager, with_db_connection
+from app.src.database import MySQLConnectionManager, with_db_connection
 
 
 class SqlFileExecutor:

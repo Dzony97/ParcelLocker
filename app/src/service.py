@@ -1,6 +1,6 @@
-from src.repository import LockerRepository, ClientRepository, ParcelLockerRepository, PackageRepository
-from src.database import MySQLConnectionManager
-from src.entity import Package
+from app.src.repository import LockerRepository, ClientRepository, ParcelLockerRepository, PackageRepository
+from app.src.database import MySQLConnectionManager
+from app.src.entity import Package
 from enum import Enum
 from dataclasses import dataclass
 from datetime import datetime
