@@ -71,9 +71,10 @@ class ParcelLockerService:
                 )
                 package = self.package_repo.insert(package)
                 locker_to_use = self.locker_repo.find_by_id(available_slots[0])
-                locker_to_use.status, locker_to_use.package_id, locker_to_use.client_id \
+                locker_to_use.status, locker_to_use.package_id, locker_to_use.sender_id \
                     = "Occupied", package, receiver_id
                 self.locker_repo.update(locker_to_use.id_, locker_to_use)
+
                 return package
         raise ValueError("No available slots found")
 
@@ -98,7 +99,7 @@ class ParcelLockerService:
 
         locker_to_use.status = "Available"
         locker_to_use.package_id = None
-        locker_to_use.client_id = None
+        locker_to_use.sender_id = None
         self.locker_repo.update(locker_to_use.id_, locker_to_use)
 
 

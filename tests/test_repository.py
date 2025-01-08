@@ -139,7 +139,7 @@ def test_insert_locker(locker_repository):
 
     assert retrieved_locker.parcel_locker_id == expected_parcel_locker_id
     assert retrieved_locker.package_id == expected_package_id
-    assert retrieved_locker.client_id == expected_client_id
+    assert retrieved_locker.sender_id == expected_client_id
     assert retrieved_locker.size == expected_size
     assert retrieved_locker.status == excepted_status
 

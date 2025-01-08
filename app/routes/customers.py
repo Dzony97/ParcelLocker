@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, request, Response, make_response, Blueprint
 from app.src.configuration import parcel_locker_service
-from app.src.entity import Size
+from flask_pydantic import validate
+from pydantic import BaseModel, Field
+
 
 import logging
 
@@ -8,6 +10,13 @@ logging.basicConfig(level=logging.INFO)
 
 clients_blueprint = Blueprint('clients', __name__, url_prefix='/clients')
 packages_blueprint = Blueprint('packages', __name__, url_prefix='/packages')
+
+
+class PackageRequestModel(BaseModel):
+    sender_id: int = Field(..., ge=0, description='Sender ID')
+    receiver_id: int = Field(..., ge=0, description='Receiver ID')
+    max_distance: float = Field(..., ge=0, description='Max distance parcel lockers from the user')
+    size: str = Field(..., description='Size: S, M or L')
 
 
 @clients_blueprint.route('/<int:client_id>')
@@ -22,27 +31,18 @@ def get_clients_location_route(client_id: int) -> Response:
 
 
 @packages_blueprint.route('', methods=['POST'])
-def send_package_route() -> Response:
+@validate()
+def send_package_route(body: PackageRequestModel) -> Response:
     try:
-        data = request.get_json()
+        sender_id = body.sender_id
+        receiver_id = body.receiver_id
+        max_distance = body.max_distance
+        size = body.size
 
-        if not data:
-            return jsonify({'message': 'No JSON payload provided'}), 400
+        if size not in ['S', 'M', 'L']:
+            return jsonify({'message': f'The size must be S, M or L'}), 400
 
-        client_id = data.get('client_id')
-        receiver_id = data.get('receiver_id')
-        max_distance = data.get('max_distance')
-        size = data.get('size')
-
-        if not all([client_id, receiver_id, max_distance, size]):
-            return jsonify({'message': 'Missing required fields'}), 400
-
-        try:
-            size_enum = Size[size].value
-        except KeyError:
-            return jsonify({'message': 'Invalid size value. Must be one of S, M, L.'}), 422
-
-        package = parcel_locker_service.send_package(client_id, receiver_id, max_distance, size_enum)
+        package = parcel_locker_service.send_package(sender_id, receiver_id, max_distance, size)
         return jsonify({'package': package}), 201
 
     except Exception as e:

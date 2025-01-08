@@ -10,6 +10,7 @@ inflection = "*"
 geopy = "*"
 flask = "*"
 gunicorn = "*"
+flask-pydantic = "*"
 
 
 [dev-packages]
