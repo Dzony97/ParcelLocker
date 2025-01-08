@@ -6,10 +6,11 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 
-service_blueprint = Blueprint('service', __name__, url_prefix='/service')
+clients_blueprint = Blueprint('clients', __name__, url_prefix='/clients')
+packages_blueprint = Blueprint('packages', __name__, url_prefix='/packages')
 
 
-@service_blueprint.route('/client/<int:client_id>')
+@clients_blueprint.route('/<int:client_id>')
 def get_clients_location_route(client_id: int) -> Response:
     try:
         client = parcel_locker_service.client_repo.find_by_id(client_id)
@@ -20,7 +21,7 @@ def get_clients_location_route(client_id: int) -> Response:
         return jsonify({'message': f'An unexpected error occurred: {str(e)}'}), 500
 
 
-@service_blueprint.route('/send_package', methods=['POST'])
+@packages_blueprint.route('', methods=['POST'])
 def send_package_route() -> Response:
     try:
         data = request.get_json()
@@ -48,7 +49,7 @@ def send_package_route() -> Response:
         return jsonify({'message': f'An unexpected error occurred: {str(e)}'}), 500
 
 
-@service_blueprint.route('/package/<int:package_id>', methods=['PUT'])
+@packages_blueprint.route('/<int:package_id>', methods=['PUT'])
 def receive_package_route(package_id: int) -> Response:
     try:
         package = parcel_locker_service.package_repo.find_by_id(package_id)
