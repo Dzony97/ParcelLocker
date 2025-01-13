@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
 
 
-def main() -> Flask:
+def create_app() -> Flask:
     with app.app_context():
         ENV_FILENAME = '.env'
         ENV_PATH = Path.cwd().absolute().joinpath(f'{ENV_FILENAME}')
