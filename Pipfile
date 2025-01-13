@@ -7,11 +7,16 @@ name = "pypi"
 mysql-connector-python = "*"
 python-dotenv = "*"
 inflection = "*"
-geopy = "*"
 flask = "*"
 gunicorn = "*"
 flask-pydantic = "*"
-
+flask-restful = "*"
+flask-sqlalchemy = "*"
+mysqlclient = "*"
+pyjwt = "*"
+flask-migrate = "*"
+flask-mail = "*"
+flask-cors = "*"
 
 [dev-packages]
 pytest = "*"
