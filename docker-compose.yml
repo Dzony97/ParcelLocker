@@ -62,6 +62,24 @@ services:
     networks:
       - km-flask
 
+  api-gateway-webapp:
+    build:
+      context: ./api_gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway-webapp
+    command: gunicorn --bind 0.0.0.0:8000 --workers 4 'main:create_app()' --reload
+    volumes:
+      - ./api_gateway:/webapp
+    depends_on:
+      - parcel_lockers-webapp
+      - users-webapp
+    ports:
+      - "8000:8000"
+    networks:
+      km-flask:
+        aliases:
+          - flask-app
+
   parcel_lockers-webapp:
     restart: always
     build:
@@ -78,23 +96,6 @@ services:
         condition: service_healthy
     ports:
       - "8100:8100"
-    networks:
-      km-flask:
-        aliases:
-          - flask-app
-
-  api-gateway-webapp:
-    build:
-      context: ./api_gateway
-      dockerfile: Dockerfile
-    container_name: api-gateway-webapp
-    command: gunicorn --bind 0.0.0.0:8000 --workers 4 'main:create_app()' --reload
-    volumes:
-      - ./api_gateway:/webapp
-    depends_on:
-      - hotels-webapp
-    ports:
-      - "8000:8000"
     networks:
       km-flask:
         aliases:
@@ -117,18 +118,6 @@ services:
         aliases:
           - flask-app
 
-  parcel-lockers-nginx:
-    restart: always
-    image: nginx:latest
-    volumes:
-      - ./parcel_lockers/default.conf:/etc/nginx/conf.d/default.conf
-    ports:
-      - '81:81'
-    depends_on:
-      - parcel_lockers-webapp
-    networks:
-      - km-flask
-
   api-gateway-nginx:
     restart: always
     image: nginx:latest
@@ -136,6 +125,18 @@ services:
       - ./api_gateway/default.conf:/etc/nginx/conf.d/default.conf
     ports:
       - '80:80'
+    depends_on:
+      - parcel_lockers-webapp
+    networks:
+      - km-flask
+
+  parcel-lockers-nginx:
+    restart: always
+    image: nginx:latest
+    volumes:
+      - ./parcel_lockers/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - '81:81'
     depends_on:
       - parcel_lockers-webapp
     networks:
