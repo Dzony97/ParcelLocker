@@ -35,7 +35,7 @@ class UserEntity(sa.Model):
     client: Mapped['Client'] = sa.relationship('Client', uselist=False)
 
 
-class Client(sa.Model):
+class ClientEntity(sa.Model):
     __tablename__ = 'client'
 
     id_: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
