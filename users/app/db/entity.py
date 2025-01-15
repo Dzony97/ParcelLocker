@@ -12,9 +12,6 @@ from sqlalchemy import (
     BigInteger,
     ForeignKey,
 )
-from decimal import Decimal
-from werkzeug.security import generate_password_hash, check_password_hash
-import datetime
 import logging
 logging.basicConfig(level=logging.INFO)
 
@@ -32,7 +29,7 @@ class UserEntity(sa.Model):
     role: Mapped[str] = mapped_column(String(10), nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=False)
 
-    client: Mapped['Client'] = sa.relationship('Client', uselist=False)
+    client: Mapped['ClientEntity'] = sa.relationship('Client', uselist=False)
 
 
 class ClientEntity(sa.Model):
