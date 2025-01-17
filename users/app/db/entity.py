@@ -11,6 +11,7 @@ from sqlalchemy import (
     ForeignKey,
 )
 import logging
+
 logging.basicConfig(level=logging.INFO)
 
 
@@ -27,7 +28,7 @@ class UserEntity(sa.Model):
     role: Mapped[str] = mapped_column(String(10), nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=False)
 
-    client: Mapped['ClientEntity'] = sa.relationship('Client', uselist=False)
+    client: Mapped['ClientEntity'] = sa.relationship('ClientEntity', uselist=False, back_populates='user')
 
 
 class ClientEntity(sa.Model):
@@ -40,6 +41,8 @@ class ClientEntity(sa.Model):
     phone_number: Mapped[str] = mapped_column(String(20), nullable=False, unique=True)
     latitude: Mapped[float] = mapped_column(Float)
     longitude: Mapped[float] = mapped_column(Float)
-    user_id: Mapped[int] = mapped_column(Integer, ForeignKey('users.id'), nullable=False)
 
-    user: Mapped['UserEntity'] = sa.relationship('UserEntity')
+    user: Mapped['UserEntity'] = sa.relationship('UserEntity',
+                                                 primaryjoin="and_(ClientEntity.email == UserEntity.email, "
+                                                             "ClientEntity.phone_number == UserEntity.phone_number)",
+                                                 back_populates='client')
