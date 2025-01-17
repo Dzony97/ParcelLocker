@@ -8,7 +8,7 @@ from sqlalchemy import (
     Boolean,
     Integer,
     Float,
-    ForeignKey,
+    ForeignKey
 )
 import logging
 
@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO)
 class UserEntity(sa.Model):
     __tablename__ = 'users'
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    id_: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     username: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
     password: Mapped[str] = mapped_column(String(512), nullable=False)
     email: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
@@ -39,10 +39,12 @@ class ClientEntity(sa.Model):
     last_name: Mapped[str] = mapped_column(String(55), nullable=False)
     email: Mapped[str] = mapped_column(String(55), nullable=False, unique=True)
     phone_number: Mapped[str] = mapped_column(String(20), nullable=False, unique=True)
+
+    user_id: Mapped[int] = mapped_column(Integer, sa.ForeignKey('users.id'), nullable=False)
+
     latitude: Mapped[float] = mapped_column(Float)
     longitude: Mapped[float] = mapped_column(Float)
 
-    user: Mapped['UserEntity'] = sa.relationship('UserEntity',
-                                                 primaryjoin="and_(ClientEntity.email == UserEntity.email, "
-                                                             "ClientEntity.phone_number == UserEntity.phone_number)",
-                                                 back_populates='client')
+    user: Mapped['UserEntity'] = sa.relationship('UserEntity', back_populates='client')
+
+
