@@ -1,15 +1,13 @@
-from users.app.db.configuration import sa
+from app.db.configuration import sa
 from sqlalchemy.orm import (
     Mapped,
     mapped_column
 )
 from sqlalchemy import (
     String,
-    Numeric,
     Boolean,
     Integer,
     Float,
-    BigInteger,
     ForeignKey,
 )
 import logging

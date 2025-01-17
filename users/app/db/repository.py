@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import joinedload
-from users.app.db.entity import ClientEntity, UserEntity
-from users.app.db.configuration import sa
+from app.db.entity import ClientEntity, UserEntity
+from app.db.configuration import sa
 import logging
 logging.basicConfig(level=logging.INFO)
 

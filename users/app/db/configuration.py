@@ -1,8 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativBase
+from sqlalchemy.orm import DeclarativeBase
 
 
-class Base(DeclarativBase):
+class Base(DeclarativeBase):
     pass
 
 

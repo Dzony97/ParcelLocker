@@ -8,13 +8,14 @@ flask = "*"
 gunicorn = "*"
 python-dotenv = "*"
 flask-restful = "*"
-flask-sqlalchemy = "*"
 mysqlclient = "*"
-flask-migrate = "*"
 pytest = "*"
 pytest-mock = "*"
 pytest-flask = "*"
 flask-testing = "*"
+sqlalchemy = "*"
+flask-migrate = "*"
+flask-sqlalchemy = "*"
 
 [dev-packages]
 
