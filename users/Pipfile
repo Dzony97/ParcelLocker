@@ -14,8 +14,8 @@ pytest-mock = "*"
 pytest-flask = "*"
 flask-testing = "*"
 sqlalchemy = "*"
-flask-migrate = "*"
 flask-sqlalchemy = "*"
+flask-migrate = "*"
 
 [dev-packages]
 
