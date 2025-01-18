@@ -71,11 +71,11 @@ class UserRepository(CrudRepositoryORM[UserEntity]):
         super().__init__(db)
 
     @staticmethod
-    def find_by_username(self, username: str) -> UserEntity | None:
+    def find_by_username(username: str) -> UserEntity | None:
         return UserEntity.query.filter_by(username=username).first()
 
     @staticmethod
-    def find_by_email(self, email: str) -> UserEntity | None:
+    def find_by_email(email: str) -> UserEntity | None:
         return UserEntity.query.filter_by(email=email).first()
 
 

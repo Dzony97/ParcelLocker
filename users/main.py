@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 from app.db.configuration import sa
 from app.db.entity import UserEntity, ClientEntity
+from app.routes.resource import UserResource
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -34,5 +35,8 @@ def create_app() -> Flask:
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         sa.init_app(app)
         migrate = Migrate(app, sa)
+
+        api = Api(app)
+        api.add_resource(UserResource, '/users')
 
         return app

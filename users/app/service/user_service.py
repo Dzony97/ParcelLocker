@@ -9,7 +9,7 @@ class UserService:
 
     def register_user(self, register_user_dto: RegisterUserDto) -> UserDto:
 
-        if not register_user_dto.check_password():
+        if not register_user_dto.check_passwords():
             raise ValueError('Passwords is incorrect')
 
         if self.user_repository.find_by_username(register_user_dto.username):

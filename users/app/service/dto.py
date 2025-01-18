@@ -72,7 +72,7 @@ class UserDto:
     @classmethod
     def from_user_entity(cls, user_entity: UserEntity) -> Self:
         return cls(
-            user_entity.id,
+            user_entity.id_,
             user_entity.username,
             user_entity.email,
             user_entity.phone_number,
