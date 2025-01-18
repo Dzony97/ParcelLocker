@@ -25,8 +25,6 @@ class UserEntity(sa.Model):
     phone_number: Mapped[str] = mapped_column(String(20), nullable=False, unique=True)
     first_name: Mapped[str] = mapped_column(String(55), nullable=False)
     last_name: Mapped[str] = mapped_column(String(55), nullable=False)
-    role: Mapped[str] = mapped_column(String(10), nullable=False)
-    is_active: Mapped[bool] = mapped_column(Boolean, default=False)
 
     client: Mapped['ClientEntity'] = sa.relationship('ClientEntity', uselist=False, back_populates='user')
 
@@ -40,7 +38,7 @@ class ClientEntity(sa.Model):
     email: Mapped[str] = mapped_column(String(55), nullable=False, unique=True)
     phone_number: Mapped[str] = mapped_column(String(20), nullable=False, unique=True)
 
-    user_id: Mapped[int] = mapped_column(Integer, sa.ForeignKey('users.id'), nullable=False)
+    user_id: Mapped[int] = mapped_column(sa.ForeignKey('users.id_'))
 
     latitude: Mapped[float] = mapped_column(Float)
     longitude: Mapped[float] = mapped_column(Float)
