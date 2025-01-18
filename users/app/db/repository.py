@@ -79,4 +79,18 @@ class UserRepository(CrudRepositoryORM[UserEntity]):
         return UserEntity.query.filter_by(email=email).first()
 
 
+class ClientRepository(CrudRepositoryORM[UserEntity]):
+    def __init__(self, db: SQLAlchemy):
+        super().__init__(db)
+
+    @staticmethod
+    def find_by_last_name(last_name: str) -> UserEntity | None:
+        return ClientEntity.query.filter_by(last_name=last_name)
+
+    @staticmethod
+    def find_by_email(email: str) -> UserEntity | None:
+        return ClientEntity.query.filter_by(email=email).first()
+
+
 user_repository = UserRepository(sa)
+client_repository = ClientRepository(sa)
