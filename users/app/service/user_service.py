@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from app.db.repository import UserRepository
+from app.db.repository import UserRepository, ClientRepository
 from app.service.dto import RegisterUserDto, UserDto
 from werkzeug.security import generate_password_hash
 
@@ -7,8 +7,9 @@ from werkzeug.security import generate_password_hash
 @dataclass
 class UserService:
     user_repository: UserRepository
+    client_repository: ClientRepository
 
-    def register_user(self, register_user_dto: RegisterUserDto) -> UserDto:
+    def register_user(self, register_user_dto: RegisterUserDto, user_dto: UserDto) -> UserDto:
 
         if not register_user_dto.check_passwords():
             raise ValueError('Passwords is incorrect')
@@ -21,5 +22,7 @@ class UserService:
 
         user_entity = register_user_dto.with_password(generate_password_hash(register_user_dto.password)).to_user_entity()
         self.user_repository.save_or_update(user_entity)
+        client_entity = user_dto.to_client_entity(user_entity)
+        self.client_repository.save_or_update(client_entity)
 
         return UserDto.from_user_entity(user_entity).to_dict()

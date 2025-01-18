@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from app.db.entity import UserEntity
+from app.db.entity import UserEntity, ClientEntity
 from typing import Self
 
 
@@ -52,7 +52,7 @@ class RegisterUserDto:
 
 @dataclass
 class UserDto:
-    id: int
+    id_: int
     username: str
     email: str
     phone_number: str
@@ -61,7 +61,7 @@ class UserDto:
 
     def to_dict(self) -> dict[str, int | str]:
         return {
-            'id': self.id,
+            'id': self.id_,
             'username': self.username,
             'email': self.email,
             'phone_number': self.phone_number,
@@ -78,4 +78,15 @@ class UserDto:
             user_entity.phone_number,
             user_entity.first_name,
             user_entity.last_name
+        )
+
+    def to_client_entity(self) -> ClientEntity:
+        return ClientEntity(
+            first_name=self.first_name,
+            last_name=self.last_name,
+            email=self.email,
+            phone_number=self.phone_number,
+            latitude=41.8781,
+            longitude=-87.6298,
+            user_id=self.id_
         )

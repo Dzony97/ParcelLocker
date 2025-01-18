@@ -79,7 +79,7 @@ class UserRepository(CrudRepositoryORM[UserEntity]):
         return UserEntity.query.filter_by(email=email).first()
 
 
-class ClientRepository(CrudRepositoryORM[UserEntity]):
+class ClientRepository(CrudRepositoryORM[ClientEntity]):
     def __init__(self, db: SQLAlchemy):
         super().__init__(db)
 

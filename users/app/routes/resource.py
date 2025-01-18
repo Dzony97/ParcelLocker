@@ -21,4 +21,4 @@ class UserResource(Resource):
 
     def post(self) -> Response:
         register_user_dto = RegisterUserDto.from_dict(UserResource.parser.parse_args())
-        return user_service.register_user(register_user_dto)
+        return user_service.register_user(register_user_dto, UserDto)
