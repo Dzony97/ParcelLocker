@@ -4,6 +4,7 @@ from sqlalchemy.orm import joinedload
 from app.db.entity import ClientEntity, UserEntity
 from app.db.configuration import sa
 import logging
+
 logging.basicConfig(level=logging.INFO)
 
 
@@ -63,3 +64,19 @@ class CrudRepositoryORM[T: sa.Model](CrudRepository[T]):
     def delete_all(self) -> None:
         self.sa.session.query(self.entity_type).delete()
         self.sa.session.commit()
+
+
+class UserRepository(CrudRepositoryORM[UserEntity]):
+    def __init__(self, db: SQLAlchemy):
+        super().__init__(db)
+
+    @staticmethod
+    def find_by_username(self, username: str) -> UserEntity | None:
+        return UserEntity.query.filter_by(username=username).first()
+
+    @staticmethod
+    def find_by_email(self, email: str) -> UserEntity | None:
+        return UserEntity.query.filter_by(email=email).first()
+
+
+user_repository = UserRepository(sa)
