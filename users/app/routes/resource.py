@@ -22,3 +22,12 @@ class UserResource(Resource):
     def post(self) -> Response:
         register_user_dto = RegisterUserDto.from_dict(UserResource.parser.parse_args())
         return user_service.register_user(register_user_dto, UserDto)
+
+    
+class ActivationUserResource(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('token', type=str, required=True, help='Token cannot be empty')
+
+    def post(self) -> Response:
+        json_body = ActivationUserResource.parser.parse_args()
+        return user_service.activate_user(json_body['token'])

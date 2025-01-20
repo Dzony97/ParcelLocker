@@ -33,14 +33,14 @@ class UserService:
         self.client_repository.save_or_update(client_entity)
 
         timestamp = datetime.datetime.now(datetime.UTC) + datetime.timedelta(seconds=5)
-        token = UserEntity.generate_token(30)
+        token = ActivationTokenEntity.generate_token(30)
         user_id = user_entity.id_
         self.activation_token_repository.save_or_update(ActivationTokenEntity(
             timestamp=timestamp.timestamp(),
             token=token,
             user_id=user_id))
 
-        MailSender.send(register_user_dto.email, 'Activate Your Account', f'<h1>Activation Token: {token}</h1>')
+        MailSender.send(client_entity.email, 'Activate Your Account', f'<h1>Activation Token: {token}</h1>')
 
         return UserDto.from_user_entity(user_entity).to_dict()
 
