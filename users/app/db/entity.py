@@ -13,6 +13,9 @@ from sqlalchemy import (
 )
 import datetime
 import logging
+import random
+import string
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -46,13 +49,18 @@ class ClientEntity(sa.Model):
 class ActivationTokenEntity(sa.Model):
     __tablename__ = 'activation_tokens'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id_: Mapped[int] = mapped_column(primary_key=True)
     token: Mapped[str] = mapped_column(String(255))
     timestamp: Mapped[int] = mapped_column(BigInteger)
 
-    user_id: Mapped[int] = mapped_column(sa.ForeignKey('users.id'))
+    user_id: Mapped[int] = mapped_column(sa.ForeignKey('users.id_'))
     user: Mapped[UserEntity] = sa.relationship('UserEntity', uselist=False)
 
     def is_active(self) -> bool:
         return self.timestamp > datetime.datetime.now(datetime.UTC).timestamp()
+
+    @staticmethod
+    def generate_token(size: int) -> str:
+        characters = string.ascii_letters + string.digits
+        return ''.join([random.choice(characters) for _ in range(size)])
 

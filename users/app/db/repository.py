@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import joinedload
-from app.db.entity import ClientEntity, UserEntity
+from app.db.entity import ClientEntity, UserEntity, ActivationTokenEntity
 from app.db.configuration import sa
 import logging
 
@@ -92,5 +92,15 @@ class ClientRepository(CrudRepositoryORM[ClientEntity]):
         return ClientEntity.query.filter_by(email=email).first()
 
 
+class ActivationTokenRepository(CrudRepositoryORM[ActivationTokenEntity]):
+    def __init__(self, db: SQLAlchemy):
+        super().__init__(db)
+
+    @staticmethod
+    def find_by_token(token: str) -> ActivationTokenEntity | None:
+        return ActivationTokenEntity.query.options(joinedload(ActivationTokenEntity.user)).filter_by(token=token).first()
+
+
 user_repository = UserRepository(sa)
 client_repository = ClientRepository(sa)
+activation_token_repository = ActivationTokenRepository(sa)
