@@ -86,7 +86,6 @@ class UserDto:
             last_name=self.last_name,
             email=self.email,
             phone_number=self.phone_number,
-            latitude=41.8781,
-            longitude=-87.6298,
-            user_id=self.id_
+            latitude=None,
+            longitude=None
         )
