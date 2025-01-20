@@ -30,6 +30,7 @@ class UserEntity(sa.Model):
     phone_number: Mapped[str] = mapped_column(String(20), nullable=False, unique=True)
     first_name: Mapped[str] = mapped_column(String(55), nullable=False)
     last_name: Mapped[str] = mapped_column(String(55), nullable=False)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=False)
 
     def __str__(self) -> str:
         return f'USER ENTITY: {self.id}, {self.username}'
