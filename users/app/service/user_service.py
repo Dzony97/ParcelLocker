@@ -44,3 +44,19 @@ class UserService:
 
         return UserDto.from_user_entity(user_entity).to_dict()
 
+    def activate_user(self, token: str) -> UserDto:
+        activation_token_with_user = self.activation_token_repository.find_by_token(token)
+
+        if activation_token_with_user is None:
+            raise ValueError('User not found')
+
+        self.activation_token_repository.delete_by_id(activation_token_with_user.id)
+
+        if not activation_token_with_user.is_active():
+            raise ValueError('Token has been expired')
+
+        user_to_activate = activation_token_with_user.user
+        user_to_activate.is_active = True
+        self.user_repository.save_or_update(user_to_activate)
+        return UserDto.from_user_entity(user_to_activate).to_dict()
+
