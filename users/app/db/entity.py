@@ -31,6 +31,12 @@ class UserEntity(sa.Model):
     first_name: Mapped[str] = mapped_column(String(55), nullable=False)
     last_name: Mapped[str] = mapped_column(String(55), nullable=False)
 
+    def __str__(self) -> str:
+        return f'USER ENTITY: {self.id}, {self.username}'
+
+    def __repr__(self):
+        return str(self)
+
 
 class ClientEntity(sa.Model):
     __tablename__ = 'client'
@@ -44,6 +50,12 @@ class ClientEntity(sa.Model):
     longitude: Mapped[float] = mapped_column(Float)
 
     user: Mapped[UserEntity] = sa.relationship('UserEntity', uselist=False)
+
+    def __str__(self) -> str:
+        return f'CLIENT ENTITY: {self.id}, {self.username}'
+
+    def __repr__(self):
+        return str(self)
 
 
 class ActivationTokenEntity(sa.Model):
