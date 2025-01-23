@@ -98,7 +98,8 @@ class ActivationTokenRepository(CrudRepositoryORM[ActivationTokenEntity]):
 
     @staticmethod
     def find_by_token(token: str) -> ActivationTokenEntity | None:
-        return ActivationTokenEntity.query.options(joinedload(ActivationTokenEntity.user)).filter_by(token=token).first()
+        return ActivationTokenEntity.query.options(joinedload(ActivationTokenEntity.user)).filter_by(
+            token=token).first()
 
 
 user_repository = UserRepository(sa)

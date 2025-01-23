@@ -8,7 +8,7 @@ from pathlib import Path
 from app.db.configuration import sa
 from app.mail.configuration import MailSender
 from app.db.entity import UserEntity, ClientEntity
-from app.routes.resource import UserResource
+from app.routes.resource import RegisterUserResource, ActivationUserResource
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -50,6 +50,7 @@ def create_app() -> Flask:
         MailSender(app, getenv('MAIL_USERNAME', 'testowy2.kmprograms@gmail.com'))
 
         api = Api(app)
-        api.add_resource(UserResource, '/users')
+        api.add_resource(RegisterUserResource, '/users/register')
+        api.add_resource(ActivationUserResource, '/users/activate')
 
         return app

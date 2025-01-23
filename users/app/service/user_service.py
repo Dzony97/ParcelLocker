@@ -5,9 +5,6 @@ from app.service.dto import RegisterUserDto, UserDto
 from app.mail.configuration import MailSender
 from werkzeug.security import generate_password_hash
 import datetime
-import string
-import random
-
 
 @dataclass
 class UserService:
@@ -50,13 +47,14 @@ class UserService:
         if activation_token_with_user is None:
             raise ValueError('User not found')
 
-        self.activation_token_repository.delete_by_id(activation_token_with_user.id)
-
-        if not activation_token_with_user.is_active():
+        if activation_token_with_user.is_active():
             raise ValueError('Token has been expired')
+
+        self.activation_token_repository.delete_by_id(activation_token_with_user.id_)
 
         user_to_activate = activation_token_with_user.user
         user_to_activate.is_active = True
         self.user_repository.save_or_update(user_to_activate)
+
         return UserDto.from_user_entity(user_to_activate).to_dict()
 

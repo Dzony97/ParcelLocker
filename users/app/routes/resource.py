@@ -9,7 +9,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
-class UserResource(Resource):
+class RegisterUserResource(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('username', type=str, required=True, help='Username cannot be empty')
     parser.add_argument('email', type=str, required=True, help='Email cannot be empty')
@@ -20,7 +20,7 @@ class UserResource(Resource):
     parser.add_argument('last_name', type=str, required=True, help='Lastname cannot be empty')
 
     def post(self) -> Response:
-        register_user_dto = RegisterUserDto.from_dict(UserResource.parser.parse_args())
+        register_user_dto = RegisterUserDto.from_dict(RegisterUserResource.parser.parse_args())
         return user_service.register_user(register_user_dto, UserDto)
 
 
