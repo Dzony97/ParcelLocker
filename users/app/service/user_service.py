@@ -3,6 +3,10 @@ from app.db.repository import UserRepository, ClientRepository, ActivationTokenR
 from app.db.entity import ActivationTokenEntity, UserEntity
 from app.service.dto import RegisterUserDto, UserDto
 from app.mail.configuration import MailSender
+from app.config import (
+    ACTIVATION_TOKEN_EXPIRATION_TIME_IN_SECONDS,
+    ACTIVATION_TOKEN_LENGTH
+)
 from werkzeug.security import generate_password_hash
 import datetime
 
@@ -29,8 +33,8 @@ class UserService:
         client_entity = user_dto.to_client_entity(user_entity)
         self.client_repository.save_or_update(client_entity)
 
-        timestamp = datetime.datetime.now(datetime.UTC) + datetime.timedelta(seconds=5)
-        token = ActivationTokenEntity.generate_token(30)
+        timestamp = datetime.datetime.now(datetime.UTC) + datetime.timedelta(seconds=ACTIVATION_TOKEN_EXPIRATION_TIME_IN_SECONDS)
+        token = ActivationTokenEntity.generate_token(ACTIVATION_TOKEN_LENGTH)
         user_id = user_entity.id_
         self.activation_token_repository.save_or_update(ActivationTokenEntity(
             timestamp=timestamp.timestamp(),
@@ -47,7 +51,7 @@ class UserService:
         if activation_token_with_user is None:
             raise ValueError('User not found')
 
-        if activation_token_with_user.is_active():
+        if not activation_token_with_user.is_active():
             raise ValueError('Token has been expired')
 
         self.activation_token_repository.delete_by_id(activation_token_with_user.id_)
