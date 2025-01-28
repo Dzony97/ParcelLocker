@@ -17,6 +17,7 @@ sqlalchemy = "*"
 flask-sqlalchemy = "*"
 flask-migrate = "*"
 flask-mail = "*"
+pyjwt = "*"
 
 [dev-packages]
 

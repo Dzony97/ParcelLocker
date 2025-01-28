@@ -9,7 +9,8 @@ from app.db.configuration import sa
 from app.mail.configuration import MailSender
 from app.db.entity import UserEntity, ClientEntity
 from app.routes.resource import RegisterUserResource, ActivationUserResource
-from app.config import MAIL_SETTINGS, DB_URL
+from app.config import MAIL_SETTINGS, DB_URL, JWT_CONFIG
+from app.security.configuration import configure_security
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -32,6 +33,9 @@ def create_app() -> Flask:
 
         app.config.update(MAIL_SETTINGS)
         MailSender(app, MAIL_SETTINGS['MAIL_USERNAME'])
+
+        app.config.update(JWT_CONFIG)
+        configure_security(app)
 
         api = Api(app)
         api.add_resource(RegisterUserResource, '/users/register')
