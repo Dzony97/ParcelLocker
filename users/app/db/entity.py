@@ -3,6 +3,7 @@ from sqlalchemy.orm import (
     Mapped,
     mapped_column
 )
+from werkzeug.security import check_password_hash
 from sqlalchemy import (
     String,
     Boolean,
@@ -37,6 +38,9 @@ class UserEntity(sa.Model):
 
     def __repr__(self):
         return str(self)
+
+    def check_password(self, password: str) -> bool:
+        return check_password_hash(self.password, password)
 
 
 class ClientEntity(sa.Model):
