@@ -61,7 +61,6 @@ def configure_security(app: Flask) -> None:
 
         return response
 
-
     @app.route('/refresh', methods=['POST'])
     def refresh():
         request_data = request.get_json()
@@ -70,7 +69,7 @@ def configure_security(app: Flask) -> None:
         decoded_refresh_token = jwt.decode(refresh_token, app.config['JWT_SECRET'], algorithms=[app.config['JWT_AUTHTYPE']])
 
         new_access_token_exp = int((datetime.datetime.now(datetime.UTC) + datetime.timedelta(minutes=app.config['JWT_ACCESS_MAX_AGE'])).timestamp())
-        accces_token_payload = {
+        access_token_payload = {
             'iat': datetime.datetime.now(datetime.UTC),
             'exp': new_access_token_exp,
             'sub': decoded_refresh_token['sub'],
@@ -85,7 +84,7 @@ def configure_security(app: Flask) -> None:
             'access_token_exp': new_access_token_exp
         }
 
-        access_token = jwt.encode(accces_token_payload, app.config['JWT_SECRET'], algorithm=app.config['JWT_AUTHTYPE'])
+        access_token = jwt.encode(access_token_payload, app.config['JWT_SECRET'], algorithm=app.config['JWT_AUTHTYPE'])
         refresh_token = jwt.encode(refresh_token_payload, app.config['JWT_SECRET'], algorithm=app.config['JWT_AUTHTYPE'])
 
         response_body = {
