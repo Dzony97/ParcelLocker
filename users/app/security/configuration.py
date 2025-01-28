@@ -60,3 +60,44 @@ def configure_security(app: Flask) -> None:
         response.set_cookie('RefreshToken', refresh_token, httponly=True)
 
         return response
+
+
+    @app.route('/refresh', methods=['POST'])
+    def refresh():
+        request_data = request.get_json()
+        refresh_token = request_data['token']
+
+        decoded_refresh_token = jwt.decode(refresh_token, app.config['JWT_SECRET'], algorithms=[app.config['JWT_AUTHTYPE']])
+
+        new_access_token_exp = int((datetime.datetime.now(datetime.UTC) + datetime.timedelta(minutes=app.config['JWT_ACCESS_MAX_AGE'])).timestamp())
+        accces_token_payload = {
+            'iat': datetime.datetime.now(datetime.UTC),
+            'exp': new_access_token_exp,
+            'sub': decoded_refresh_token['sub'],
+            'role': decoded_refresh_token['role'],
+        }
+
+        refresh_token_payload = {
+            'iat': datetime.datetime.now(datetime.UTC),
+            'exp': decoded_refresh_token['exp'],
+            'sub': decoded_refresh_token['sub'],
+            'role': decoded_refresh_token['role'],
+            'access_token_exp': new_access_token_exp
+        }
+
+        access_token = jwt.encode(accces_token_payload, app.config['JWT_SECRET'], algorithm=app.config['JWT_AUTHTYPE'])
+        refresh_token = jwt.encode(refresh_token_payload, app.config['JWT_SECRET'], algorithm=app.config['JWT_AUTHTYPE'])
+
+        response_body = {
+            'access_token': access_token,
+            'refresh_token': refresh_token
+        }
+        response = make_response(response_body, 201)
+
+        response.headers['Access-Token'] = access_token
+        response.headers['Refresh-Token'] = refresh_token
+
+        response.set_cookie('AccessToken', access_token, httponly=True)
+        response.set_cookie('RefreshToken', refresh_token, httponly=True)
+
+        return response
