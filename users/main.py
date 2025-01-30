@@ -10,7 +10,7 @@ from app.mail.configuration import MailSender
 from app.db.entity import UserEntity, ClientEntity
 from app.routes.resource import RegisterUserResource, ActivationUserResource
 from app.config import MAIL_SETTINGS, DB_URL, JWT_CONFIG
-from app.security.configuration import configure_security
+from app.security.configuration import configure_security, users_blueprint
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -36,6 +36,8 @@ def create_app() -> Flask:
 
         app.config.update(JWT_CONFIG)
         configure_security(app)
+
+        app.register_blueprint(users_blueprint)
 
         api = Api(app)
         api.add_resource(RegisterUserResource, '/users/register')

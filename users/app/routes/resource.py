@@ -18,6 +18,7 @@ class RegisterUserResource(Resource):
     parser.add_argument('phone_number', type=str, required=True, help='Phone number cannot be empty')
     parser.add_argument('first_name', type=str, required=True, help='Firstname cannot be empty')
     parser.add_argument('last_name', type=str, required=True, help='Lastname cannot be empty')
+    parser.add_argument('role', type=str, required=True, help='Role cannot be empty')
 
     def post(self) -> Response:
         register_user_dto = RegisterUserDto.from_dict(RegisterUserResource.parser.parse_args())

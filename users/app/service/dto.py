@@ -12,6 +12,7 @@ class RegisterUserDto:
     phone_number: str
     first_name: str
     last_name: str
+    role: str
 
     def check_passwords(self) -> bool:
         return self.password == self.password_confirmation
@@ -24,7 +25,8 @@ class RegisterUserDto:
             password_confirmation=self.password_confirmation,
             phone_number=self.phone_number,
             first_name=self.first_name,
-            last_name=self.last_name
+            last_name=self.last_name,
+            role=self.role
         )
 
     def to_user_entity(self) -> UserEntity:
@@ -34,7 +36,8 @@ class RegisterUserDto:
             password=self.password,
             phone_number=self.phone_number,
             first_name=self.first_name,
-            last_name=self.last_name
+            last_name=self.last_name,
+            role=self.role
         )
 
     @classmethod
@@ -46,7 +49,8 @@ class RegisterUserDto:
             password_confirmation=data['password_confirmation'],
             phone_number=data['phone_number'],
             first_name=data['first_name'],
-            last_name=data['last_name']
+            last_name=data['last_name'],
+            role=data['role']
         )
 
 
@@ -58,6 +62,7 @@ class UserDto:
     phone_number: str
     first_name: str
     last_name: str
+    role: str
 
     def to_dict(self) -> dict[str, int | str]:
         return {
@@ -66,7 +71,8 @@ class UserDto:
             'email': self.email,
             'phone_number': self.phone_number,
             'first_name': self.first_name,
-            'last_name': self.last_name
+            'last_name': self.last_name,
+            'role': self.role
         }
 
     @classmethod
@@ -77,7 +83,8 @@ class UserDto:
             user_entity.email,
             user_entity.phone_number,
             user_entity.first_name,
-            user_entity.last_name
+            user_entity.last_name,
+            user_entity.role
         )
 
     def to_client_entity(self) -> ClientEntity:

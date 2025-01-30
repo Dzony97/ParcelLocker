@@ -9,9 +9,11 @@ import jwt
 import logging
 logger = logging.basicConfig(level=logging.INFO)
 
+users_blueprint = Blueprint('users', __name__, url_prefix='/users'
+                                                          '')
 
 def configure_security(app: Flask) -> None:
-    @app.route('/login', methods=['POST'])
+    @users_blueprint.route('/login', methods=['POST'])
     def login():
         data = request.get_json()
         username = data['username']
@@ -35,12 +37,14 @@ def configure_security(app: Flask) -> None:
             'iat': datetime.datetime.now(datetime.UTC),
             'exp': access_token_exp,
             'sub': user.id_,
+            'role': user.role,
         }
 
         refresh_token_payload = {
             'iat': datetime.datetime.now(datetime.UTC),
             'exp': refresh_token_exp,
             'sub': user.id_,
+            'role': user.role,
             'access_token_exp': access_token_exp
         }
 
@@ -61,12 +65,15 @@ def configure_security(app: Flask) -> None:
 
         return response
 
-    @app.route('/refresh', methods=['POST'])
+    @users_blueprint.route('/refresh', methods=['POST'])
     def refresh():
         request_data = request.get_json()
         refresh_token = request_data['token']
 
         decoded_refresh_token = jwt.decode(refresh_token, app.config['JWT_SECRET'], algorithms=[app.config['JWT_AUTHTYPE']])
+
+        if decoded_refresh_token['access_token_exp'] < datetime.datetime.now(datetime.UTC).timestamp():
+            return make_response({'message': 'Cannot refresh token - access token has been expired'}, 401)
 
         new_access_token_exp = int((datetime.datetime.now(datetime.UTC) + datetime.timedelta(minutes=app.config['JWT_ACCESS_MAX_AGE'])).timestamp())
         access_token_payload = {
