@@ -1,20 +1,31 @@
-from flask import Flask, request, jsonify, Response
-from flask_restful import Api
-import logging
-
-logging.basicConfig(level=logging.INFO)
+import httpx
+from flask import Flask, request, Response
 
 
-def create_app() -> Flask:
+def create_app():
     app = Flask(__name__)
 
-    with app.app_context():
-        @app.route('/', methods=['GET'])
-        def index() -> Response:
-            return {'api_gateway': 'application works'}
+    @app.route("/")
+    def index():
+        return "Hello from HTTPX-based API Gateway!"
 
-        @app.errorhandler(Exception)
-        def handle_error(error: Exception):
-            return {'message': str(error)}, 500
+    @app.route("/users/<path:subpath>", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
+    def proxy_users(subpath):
+        target_url = f"http://users-webapp:8200/users/{subpath}"
 
-        return app
+        forwarded_headers = {
+            k: v for k, v in request.headers if k.lower() != "host"
+        }
+
+        resp = httpx.request(
+            method=request.method,
+            url=target_url,
+            headers=forwarded_headers,
+            content=request.get_data(),
+            cookies=request.cookies,
+            follow_redirects=False
+        )
+
+        return (resp.content, resp.status_code, resp.headers.items())
+
+    return app
