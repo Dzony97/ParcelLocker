@@ -53,15 +53,25 @@ services:
     depends_on:
       - parcel_lockers-webapp
       - users-webapp
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     networks:
-      km-flask:
-        aliases:
-          - flask-app
+      - km-flask
+
+
+  api-gateway-nginx:
+    image: nginx:latest
+    container_name: api-gateway-nginx
+    volumes:
+      - ./api_gateway/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - api-gateway-webapp
+    ports:
+      - '80:80'
+    networks:
+      - km-flask
 
   parcel_lockers-webapp:
-    restart: always
     build:
       context: ./parcel_lockers
       dockerfile: Dockerfile
@@ -77,9 +87,20 @@ services:
     expose:
       - "8100"
     networks:
-      km-flask:
-        aliases:
-          - flask-app
+      - km-flask
+
+  parcel_lockers-nginx:
+    image: nginx:latest
+    container_name: parcel_lockers-nginx
+    volumes:
+      - ./parcel_lockers/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - parcel_lockers-webapp
+    ports:
+      - '81:81'
+    networks:
+      - km-flask
+
 
   users-webapp:
     build:
@@ -95,18 +116,18 @@ services:
     expose:
       - "8200"
     networks:
-      km-flask:
-        aliases:
-          - flask-app
+      - km-flask
 
-  api-gateway-nginx:
+
+  users-nginx:
     image: nginx:latest
+    container_name: users-nginx
     volumes:
-      - ./api_gateway/default.conf:/etc/nginx/conf.d/default.conf
-    ports:
-      - '80:80'
+      - ./users/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - api-gateway-webapp
+      - users-webapp
+    ports:
+      - '82:82'
     networks:
       - km-flask
 

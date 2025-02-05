@@ -20,12 +20,6 @@ def create_app() -> Flask:
             error_message = error.args[0]
             return jsonify({'error': error_message}), 500
 
-        @app.route('/hello')
-        def hello_action():
-            return jsonify({
-                'author': 'Patryk'
-            })
-
         app.register_blueprint(clients_blueprint)
         app.register_blueprint(packages_blueprint)
 
