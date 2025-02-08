@@ -1,4 +1,1 @@
-users/.env
-parcel_lockers/.env
-
-
+*.env
