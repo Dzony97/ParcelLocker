@@ -1,5 +1,6 @@
-import httpx
-from flask import Flask, request, Response, jsonify
+from flask import Flask, jsonify
+from routes.parcel_locker import clients_blueprint, packages_blueprint
+from routes.users import users_blueprint
 
 app = Flask(__name__)
 
@@ -12,79 +13,12 @@ def create_app():
             error_message = error.args[0]
             return jsonify({'error': error_message}), 500
 
-        #
         # --- USERS mikroserwis ---
-        #
-        @app.route("/users/<path:subpath>", methods=["GET", "POST"])
-        def proxy_users(subpath):
-            target_url = f"http://users-nginx:82/users/{subpath}"
-            forwarded_headers = {
-                k: v for k, v in request.headers if k.lower() != "host"
-            }
+        app.register_blueprint(users_blueprint)
 
-            resp = httpx.request(
-                method=request.method,
-                url=target_url,
-                headers=forwarded_headers,
-                content=request.get_data(),
-                cookies=request.cookies,
-                follow_redirects=False
-            )
-            return (resp.content, resp.status_code, resp.headers.items())
-
-        #
         # --- PARCEL_LOCKERS mikroserwis ---
-        #
-        @app.route("/clients/<int:client_id>", methods=["GET"])
-        def proxy_clients_get(client_id):
-            target_url = "http://parcel_lockers-nginx:81/packages"
-            forwarded_headers = {
-                k: v for k, v in request.headers if k.lower() != "host"
-            }
-
-            resp = httpx.request(
-                method=request.method,
-                url=target_url,
-                headers=forwarded_headers,
-                content=request.get_data(),
-                cookies=request.cookies,
-                follow_redirects=False
-            )
-            return (resp.content, resp.status_code, resp.headers.items())
-
-        @app.route("/packages", methods=["POST"])
-        def proxy_packages_post():
-            target_url = "http://parcel_lockers-webapp:8100/packages"
-            forwarded_headers = {
-                k: v for k, v in request.headers if k.lower() != "host"
-            }
-
-            resp = httpx.request(
-                method=request.method,
-                url=target_url,
-                headers=forwarded_headers,
-                content=request.get_data(),
-                cookies=request.cookies,
-                follow_redirects=False
-            )
-            return (resp.content, resp.status_code, resp.headers.items())
-
-        @app.route("/packages/<int:package_id>", methods=["PUT"])
-        def proxy_packages_put(package_id):
-            target_url = f"http://parcel_lockers-webapp:8100/packages/{package_id}"
-            forwarded_headers = {
-                k: v for k, v in request.headers if k.lower() != "host"
-            }
-
-            resp = httpx.request(
-                method=request.method,
-                url=target_url,
-                headers=forwarded_headers,
-                content=request.get_data(),
-                cookies=request.cookies,
-                follow_redirects=False
-            )
-            return (resp.content, resp.status_code, resp.headers.items())
+        app.register_blueprint(clients_blueprint)
+        app.register_blueprint(packages_blueprint)
 
         return app
 
