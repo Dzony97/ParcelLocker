@@ -46,5 +46,5 @@ docker-compose up --build
 
 If the project requires running a main function, execute it:
 ```bash
-piprnv run python main.py
+pipenv run python main.py
 ```
