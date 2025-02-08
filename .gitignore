@@ -1,2 +1,4 @@
-.env
+users/.env
+parcel_lockers/.env
+
 
