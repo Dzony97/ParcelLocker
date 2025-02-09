@@ -1,6 +1,6 @@
 from app.src.repository import LockerRepository, ClientRepository, ParcelLockerRepository, PackageRepository
 from app.src.database import MySQLConnectionManager
-from app.src.entity import Package
+from app.src.entity import Package, ParcelLocker, Locker
 from enum import Enum
 from dataclasses import dataclass
 from datetime import datetime
@@ -101,5 +101,45 @@ class ParcelLockerService:
         locker_to_use.client_id = None
         self.locker_repo.update(locker_to_use.id_, locker_to_use)
 
+    def add_parcel_locker(self, city: str, postal_code: str, latitude: float, longitude: float) -> int:
+        """
+        Creates a new ParcelLocker object and inserts it into the database.
 
+        :param city: The name of the city where the parcel locker is located
+        :param postal_code: The postal code of the parcel locker
+        :param latitude: The latitude coordinate
+        :param longitude: The longitude coordinate
+        :return: The ID of the newly added record in the database
+        """
+        parcel_locker = ParcelLocker(
+            city=city,
+            postal_code=postal_code,
+            latitude=latitude,
+            longitude=longitude
+        )
 
+        new_parcel_locker = self.parcel_locker_repo.insert(parcel_locker)
+        return new_parcel_locker
+
+    def add_locker(self, parcel_locker_id: int, package_id: int | None, client_id: int | None, size: str,
+                   status: str) -> Locker:
+        """
+        Creates a new Locker object and inserts it into the database.
+
+        :param parcel_locker_id: The ID of the parcel locker this locker belongs to.
+        :param package_id: The ID of the package inside this locker (optional).
+        :param client_id: The ID of the client (optional).
+        :param size: The size of the locker (e.g., S, M, L).
+        :param status: The status of the locker (e.g., 'EMPTY', 'OCCUPIED').
+        :return: The ID of the newly added record in the database.
+        """
+        locker = Locker(
+            parcel_locker_id=parcel_locker_id,
+            package_id=package_id,
+            client_id=client_id,
+            size=size,
+            status=status
+        )
+
+        new_locker = self.locker_repo.insert(locker)
+        return new_locker

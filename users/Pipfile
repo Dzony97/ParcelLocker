@@ -18,6 +18,7 @@ flask-sqlalchemy = "*"
 flask-migrate = "*"
 flask-mail = "*"
 pyjwt = "*"
+pydantic = "*"
 
 [dev-packages]
 

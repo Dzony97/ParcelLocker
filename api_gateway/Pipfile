@@ -8,6 +8,7 @@ flask = "*"
 gunicorn = "*"
 httpx = "*"
 python-dotenv = "*"
+pyjwt = "*"
 
 [dev-packages]
 

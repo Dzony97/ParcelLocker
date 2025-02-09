@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from routes.parcel_locker import clients_blueprint, packages_blueprint
+from routes.parcel_locker import clients_blueprint, packages_blueprint, parcel_lockers_blueprint
 from routes.users import users_blueprint
 
 app = Flask(__name__)
@@ -19,6 +19,7 @@ def create_app():
         # --- PARCEL_LOCKERS mikroserwis ---
         app.register_blueprint(clients_blueprint)
         app.register_blueprint(packages_blueprint)
+        app.register_blueprint(parcel_lockers_blueprint)
 
         return app
 

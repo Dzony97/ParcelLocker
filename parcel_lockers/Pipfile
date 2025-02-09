@@ -17,6 +17,7 @@ pyjwt = "*"
 flask-migrate = "*"
 flask-mail = "*"
 flask-cors = "*"
+pydantic = "*"
 
 [dev-packages]
 pytest = "*"

@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 from os import getenv
 from app.routes.customers import clients_blueprint, packages_blueprint
+from app.routes.management import parcel_lockers_blueprint
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -22,5 +23,6 @@ def create_app() -> Flask:
 
         app.register_blueprint(clients_blueprint)
         app.register_blueprint(packages_blueprint)
+        app.register_blueprint(parcel_lockers_blueprint)
 
         return app
