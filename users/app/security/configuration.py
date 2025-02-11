@@ -36,14 +36,14 @@ def configure_security(app: Flask) -> None:
         access_token_payload = {
             'iat': datetime.datetime.now(datetime.UTC),
             'exp': access_token_exp,
-            'sub': user.id_,
+            'sub': str(user.id_),
             'role': user.role,
         }
 
         refresh_token_payload = {
             'iat': datetime.datetime.now(datetime.UTC),
             'exp': refresh_token_exp,
-            'sub': user.id_,
+            'sub': str(user.id_),
             'role': user.role,
             'access_token_exp': access_token_exp
         }
@@ -79,7 +79,7 @@ def configure_security(app: Flask) -> None:
         access_token_payload = {
             'iat': datetime.datetime.now(datetime.UTC),
             'exp': new_access_token_exp,
-            'sub': decoded_refresh_token['sub'],
+            'sub': str(decoded_refresh_token['sub']),
             'role': decoded_refresh_token['role'],
         }
 

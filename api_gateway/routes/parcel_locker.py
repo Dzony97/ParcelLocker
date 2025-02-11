@@ -27,7 +27,6 @@ def proxy_clients_get(client_id):
 
 
 @packages_blueprint.route('', methods=['POST'])
-@authorize(['admin', 'user'])
 def proxy_packages_post():
     target_url = "http://parcel_lockers-webapp:8100/packages"
     forwarded_headers = {
@@ -46,7 +45,6 @@ def proxy_packages_post():
 
 
 @packages_blueprint.route('/<int:package_id>', methods=['PUT'])
-@authorize(['admin', 'user'])
 def proxy_packages_put(package_id):
     target_url = f"http://parcel_lockers-webapp:8100/packages/{package_id}"
     forwarded_headers = {

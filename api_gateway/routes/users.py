@@ -6,7 +6,6 @@ users_blueprint = Blueprint('users', __name__, url_prefix='/users')
 
 
 @users_blueprint.route("/<path:subpath>", methods=["GET", "POST"])
-@authorize(['admin', 'user'])
 def proxy_users(subpath):
     target_url = f"http://users-nginx:82/users/{subpath}"
     forwarded_headers = {
