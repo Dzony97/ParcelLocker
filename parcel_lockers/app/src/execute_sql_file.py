@@ -1,5 +1,5 @@
 from mysql.connector import Error
-from app.src.database import MySQLConnectionManager, with_db_connection
+from parcel_lockers.app.src.database import MySQLConnectionManager, with_db_connection
 
 
 class SqlFileExecutor:

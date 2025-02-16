@@ -1,8 +1,7 @@
-from src.entity import Package, ParcelLocker, Locker, Client
-from src.repository import ClientRepository, PackageRepository, LockerRepository, ParcelLockerRepository
+from parcel_lockers.app.src.entity import Package, ParcelLocker, Locker, Client
+from parcel_lockers.app.src.repository import ClientRepository, PackageRepository, LockerRepository, ParcelLockerRepository
 import pytest
 from datetime import datetime
-from tests.conftest import connection_manager
 
 
 @pytest.fixture
@@ -39,14 +38,14 @@ def locker_repository(connection_manager) -> LockerRepository:
 
 
 @pytest.fixture
-def parcel_locker_repository(connection_manager) -> ParcelLockerRepository:
+def parcel_locker_repository(connection_manager, client_repository) -> ParcelLockerRepository:
     """
     Fixture to create and provide a `ParcelLockerRepository` instance for tests.
 
     :param connection_manager: The connection manager used to interact with the database.
     :return: A `ParcelLockerRepository` instance for performing database operations on `ParcelLocker` entities.
     """
-    return ParcelLockerRepository(connection_manager)
+    return ParcelLockerRepository(connection_manager, client_repository)
 
 
 def test_insert_client(client_repository):
@@ -139,7 +138,7 @@ def test_insert_locker(locker_repository):
 
     assert retrieved_locker.parcel_locker_id == expected_parcel_locker_id
     assert retrieved_locker.package_id == expected_package_id
-    assert retrieved_locker.sender_id == expected_client_id
+    assert retrieved_locker.client_id == expected_client_id
     assert retrieved_locker.size == expected_size
     assert retrieved_locker.status == excepted_status
 

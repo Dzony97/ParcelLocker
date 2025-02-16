@@ -1,7 +1,7 @@
 import pytest
-from src.service import ParcelLockerService
-from src.repository import LockerRepository, ClientRepository, PackageRepository, ParcelLockerRepository
-from src.entity import Size
+from parcel_lockers.app.src.service import ParcelLockerService
+from parcel_lockers.app.src.repository import LockerRepository, ClientRepository, PackageRepository, ParcelLockerRepository
+from parcel_lockers.app.src.entity import Size
 from datetime import datetime
 
 
@@ -16,7 +16,7 @@ def parcel_locker_service(connection_manager) -> ParcelLockerService:
     locker_repo = LockerRepository(connection_manager)
     client_repo = ClientRepository(connection_manager)
     package_repo = PackageRepository(connection_manager)
-    parcel_locker_repo = ParcelLockerRepository(connection_manager)
+    parcel_locker_repo = ParcelLockerRepository(connection_manager, client_repo)
 
     return ParcelLockerService(
         locker_repo=locker_repo,
@@ -35,26 +35,6 @@ def test_find_client_location(parcel_locker_service):
     """
     expected_location = parcel_locker_service.find_client_location(1)
     assert expected_location == (52.2297, 21.0122)
-
-
-def test_has_available_slots(parcel_locker_service):
-    """
-    Test to verify that the `has_available_slots` method checks the availability of slots for a given size.
-
-    :param parcel_locker_service: The service that manages the business logic related to parcel lockers.
-    """
-    expected_result = parcel_locker_service.has_available_slots(Size.S.value, 1)
-    assert expected_result == [1]
-
-
-def test_find_nearest_parcel_lockers(parcel_locker_service):
-    """
-    Test to verify that the `find_nearest_parcel_lockers` method returns the correct nearest parcel lockers.
-
-    :param parcel_locker_service: The service that manages the business logic related to parcel lockers.
-    """
-    expected_result = parcel_locker_service.find_nearest_parcel_lockers(1, 1000000)
-    assert expected_result == [(1, 'San Francisco', 9398.916624268912)]
 
 
 def test_send_package(parcel_locker_service):

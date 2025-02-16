@@ -1,5 +1,5 @@
-from app.src.entity import Entity, Client, Locker, ParcelLocker, Package
-from app.src.database import with_db_connection, MySQLConnectionManager
+from parcel_lockers.app.src.entity import Entity, Client, Locker, ParcelLocker, Package
+from parcel_lockers.app.src.database import with_db_connection, MySQLConnectionManager
 from typing import Type
 from enum import Enum
 import inflection

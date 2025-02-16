@@ -1,5 +1,5 @@
-from src.execute_sql_file import SqlFileExecutor
-from src.database import MySQLConnectionManager, with_db_connection
+from parcel_lockers.app.src.execute_sql_file import SqlFileExecutor
+from parcel_lockers.app.src.database import MySQLConnectionManager, with_db_connection
 import os
 import pytest
 
@@ -36,7 +36,7 @@ def setup_database_schema(connection_manager) -> None:
     :param connection_manager: The connection manager used to interact with the database.
     """
     executor = SqlFileExecutor(connection_manager)
-    executor.execute_sql_file(os.path.join(os.path.dirname(__file__), '../sql/schema.sql'))
+    executor.execute_sql_file(os.path.join(os.path.dirname(__file__), '../app/sql/schema.sql'))
 
 
 
