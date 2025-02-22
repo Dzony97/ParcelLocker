@@ -53,7 +53,7 @@ class CrudRepositoryORM[T: sa.Model](CrudRepository[T]):
         return self.sa.session.query(self.entity_type).get(entity_id)
 
     def find_all(self) -> list[T]:
-        return sa.session.query(self.entity_type).all()
+        return self.sa.session.query(self.entity_type).all()
 
     def delete_by_id(self, entity_id: int) -> None:
         entity = self.find_by_id(entity_id)
@@ -70,26 +70,22 @@ class UserRepository(CrudRepositoryORM[UserEntity]):
     def __init__(self, db: SQLAlchemy):
         super().__init__(db)
 
-    @staticmethod
-    def find_by_username(username: str) -> UserEntity | None:
-        return UserEntity.query.filter_by(username=username).first()
+    def find_by_username(self, username: str) -> UserEntity | None:
+        return self.sa.session.query(UserEntity).filter_by(username=username).first()
 
-    @staticmethod
-    def find_by_email(email: str) -> UserEntity | None:
-        return UserEntity.query.filter_by(email=email).first()
+    def find_by_email(self, email: str) -> UserEntity | None:
+        return self.sa.session.query(UserEntity).filter_by(email=email).first()
 
 
 class ClientRepository(CrudRepositoryORM[ClientEntity]):
     def __init__(self, db: SQLAlchemy):
         super().__init__(db)
 
-    @staticmethod
-    def find_by_last_name(last_name: str) -> UserEntity | None:
-        return ClientEntity.query.filter_by(last_name=last_name)
+    def find_by_last_name(self, last_name: str) -> list[ClientEntity]:
+        return self.sa.session.query(ClientEntity).filter_by(last_name=last_name).all()
 
-    @staticmethod
-    def find_by_email(email: str) -> UserEntity | None:
-        return ClientEntity.query.filter_by(email=email).first()
+    def find_by_email(self, email: str) -> ClientEntity | None:
+        return self.sa.session.query(ClientEntity).filter_by(email=email).first()
 
 
 class ActivationTokenRepository(CrudRepositoryORM[ActivationTokenEntity]):
