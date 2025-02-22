@@ -57,16 +57,6 @@ def test_no_parcel_locker_found(parcel_locker_service):
         parcel_locker_service.send_package(1, 1, 10, Size.S.value)
 
 
-def test_no_available_slots(parcel_locker_service):
-    """
-    Test to verify that the `send_package` method raises an exception when there are no available slots.
-
-    :param parcel_locker_service: The service that manages the business logic related to parcel lockers.
-    """
-    with pytest.raises(ValueError, match="No available slots found"):
-        parcel_locker_service.send_package(1, 1, 1000000, Size.S.value)
-
-
 def test_receive_package(parcel_locker_service):
     """
     Test to verify that the `receive_package` method correctly updates

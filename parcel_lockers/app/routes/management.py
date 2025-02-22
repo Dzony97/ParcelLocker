@@ -30,8 +30,8 @@ def add_parcel_locker_route(body: AddParcelLockerRequestModel) -> Response:
         postal_code = body.postal_code
         latitude = body.latitude
         longitude = body.longitude
-
-        new_parcel_locker_id = create_parcel_locker_service.add_parcel_locker(
+        service = create_parcel_locker_service()
+        new_parcel_locker_id = service.add_parcel_locker(
             city=city,
             postal_code=postal_code,
             latitude=latitude,
@@ -54,7 +54,8 @@ def add_locker_route(body: AddLockerRequestModel) -> Response:
         size = body.size
         status = body.status
 
-        new_locker = create_parcel_locker_service.add_locker(
+        service = create_parcel_locker_service()
+        new_locker = service.add_locker(
             parcel_locker_id=parcel_locker_id,
             package_id=package_id,
             client_id=client_id,
