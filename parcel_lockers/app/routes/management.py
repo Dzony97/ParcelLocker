@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from flask import Blueprint, jsonify, Response
 from flask_pydantic import validate
-from parcel_lockers.app.src.configuration import parcel_locker_service
+from parcel_lockers.app.src.configuration import create_parcel_locker_service
 
 parcel_lockers_blueprint = Blueprint('parcel_lockers', __name__, url_prefix='/parcel_lockers')
 
@@ -31,7 +31,7 @@ def add_parcel_locker_route(body: AddParcelLockerRequestModel) -> Response:
         latitude = body.latitude
         longitude = body.longitude
 
-        new_parcel_locker_id = parcel_locker_service.add_parcel_locker(
+        new_parcel_locker_id = create_parcel_locker_service.add_parcel_locker(
             city=city,
             postal_code=postal_code,
             latitude=latitude,
@@ -54,7 +54,7 @@ def add_locker_route(body: AddLockerRequestModel) -> Response:
         size = body.size
         status = body.status
 
-        new_locker = parcel_locker_service.add_locker(
+        new_locker = create_parcel_locker_service.add_locker(
             parcel_locker_id=parcel_locker_id,
             package_id=package_id,
             client_id=client_id,

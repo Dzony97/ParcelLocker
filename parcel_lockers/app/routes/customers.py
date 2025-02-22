@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, Response, make_response, Blueprint
-from parcel_lockers.app.src.configuration import parcel_locker_service
+from parcel_lockers.app.src.configuration import create_parcel_locker_service
 from flask_pydantic import validate
 from pydantic import BaseModel, Field
 
@@ -22,10 +22,10 @@ class PackageRequestModel(BaseModel):
 @clients_blueprint.route('/<int:client_id>')
 def get_clients_location_route(client_id: int) -> Response:
     try:
-        client = parcel_locker_service.client_repo.find_by_id(client_id)
+        client = create_parcel_locker_service.client_repo.find_by_id(client_id)
         if not client:
             return jsonify({'message': f'Client {client_id} not found'}), 404
-        return jsonify({'location': parcel_locker_service.find_client_location(client_id)}), 200
+        return jsonify({'location': create_parcel_locker_service.find_client_location(client_id)}), 200
     except Exception as e:
         return jsonify({'message': f'An unexpected error occurred: {str(e)}'}), 500
 
@@ -42,7 +42,7 @@ def send_package_route(body: PackageRequestModel) -> Response:
         if size not in ['S', 'M', 'L']:
             return jsonify({'message': f'The size must be S, M or L'}), 400
 
-        package = parcel_locker_service.send_package(sender_id, receiver_id, max_distance, size)
+        package = create_parcel_locker_service.send_package(sender_id, receiver_id, max_distance, size)
         return jsonify({'package': package}), 201
 
     except Exception as e:
@@ -52,12 +52,12 @@ def send_package_route(body: PackageRequestModel) -> Response:
 @packages_blueprint.route('/<int:package_id>', methods=['PUT'])
 def receive_package_route(package_id: int) -> Response:
     try:
-        package = parcel_locker_service.package_repo.find_by_id(package_id)
+        package = create_parcel_locker_service.package_repo.find_by_id(package_id)
         if package is None:
             return jsonify({'message': 'The package is not found'}), 404
         if package.status == 'Received':
             return jsonify({'message': 'The package was received'}), 409
-        parcel_locker_service.receive_package(package_id)
+        create_parcel_locker_service.receive_package(package_id)
         return jsonify({'package': package}), 200
     except Exception as e:
         return jsonify({'message': f'An unexpected error occurred: {str(e)}'}), 500

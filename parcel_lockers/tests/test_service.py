@@ -69,18 +69,21 @@ def test_no_available_slots(parcel_locker_service):
 
 def test_receive_package(parcel_locker_service):
     """
-    Test to verify that the `receive_package` method correctly updates the package status and locker availability.
-
-    :param parcel_locker_service: The service that manages the business logic related to parcel lockers.
+    Test to verify that the `receive_package` method correctly updates
+    the package status and locker availability, including a time
+    tolerance check for the delivered_at field.
     """
+
     parcel_locker_service.receive_package(2)
+
     package = parcel_locker_service.package_repo.find_by_id(2)
     locker = parcel_locker_service.locker_repo.find_by_id(package.locker_id)
 
+    now = datetime.now()
+    time_diff = abs((package.delivered_at - now).total_seconds())
+    assert time_diff < 5
+
     assert package.status == "Received"
-
-    assert package.delivered_at.replace(microsecond=0) == datetime.now().replace(microsecond=0)
-
     assert locker.status == "Available"
 
 

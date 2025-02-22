@@ -18,13 +18,14 @@ flask-migrate = "*"
 flask-mail = "*"
 flask-cors = "*"
 pydantic = "*"
+pytest = "*"
+pytest-mock = "*"
 
 [dev-packages]
 pytest = "*"
 pytest-cov = "*"
 testcontainers = "*"
 mypy = "*"
-
 
 [requires]
 python_version = "3.13"
