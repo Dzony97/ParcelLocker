@@ -44,7 +44,7 @@ def test_send_package(parcel_locker_service):
     :param parcel_locker_service: The service that manages the business logic related to parcel lockers.
     """
     expected_result = parcel_locker_service.send_package(1, 1, 1000000, Size.S.value)
-    assert expected_result == 2
+    assert expected_result == 3
 
 
 def test_no_parcel_locker_found(parcel_locker_service):

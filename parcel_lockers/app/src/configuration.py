@@ -22,4 +22,3 @@ def create_parcel_locker_service() -> ParcelLockerService:
         parcel_locker_repo=parcel_locker_repo,
         connection_manager=connection_manager
     )
-

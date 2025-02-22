@@ -1,7 +1,11 @@
 import os
+import pytest
+from dotenv import load_dotenv
+
+load_dotenv('.env.test')
+from parcel_lockers.main import create_app
 from parcel_lockers.app.src.execute_sql_file import SqlFileExecutor
 from parcel_lockers.app.src.database import MySQLConnectionManager, with_db_connection
-import pytest
 
 
 @pytest.fixture(scope='module')
@@ -37,3 +41,16 @@ def setup_database_schema(connection_manager) -> None:
     """
     executor = SqlFileExecutor(connection_manager)
     executor.execute_sql_file(os.path.join(os.path.dirname(__file__), '../app/sql/schema.sql'))
+
+
+@pytest.fixture(scope='session')
+def app():
+    test_app = create_app()
+    test_app.config['TESTING'] = True
+    with test_app.app_context():
+        yield test_app
+
+
+@pytest.fixture
+def client(app):
+    return app.test_client()
