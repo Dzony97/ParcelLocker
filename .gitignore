@@ -1,2 +1,3 @@
 *.env
 /parcel_lockers/.env.test
+/users/.env.test
