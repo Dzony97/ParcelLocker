@@ -7,7 +7,6 @@ name = "pypi"
 flask = "*"
 gunicorn = "*"
 python-dotenv = "*"
-flask-restful = "*"
 mysqlclient = "*"
 pytest = "*"
 pytest-mock = "*"
@@ -19,6 +18,8 @@ flask-migrate = "*"
 flask-mail = "*"
 pyjwt = "*"
 pydantic = "*"
+pytest-cov = "*"
+flask-restful = "*"
 
 [dev-packages]
 

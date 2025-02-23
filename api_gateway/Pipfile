@@ -9,6 +9,10 @@ gunicorn = "*"
 httpx = "*"
 python-dotenv = "*"
 pyjwt = "*"
+pytest = "*"
+pytest-mock = "*"
+pytest-flask = "*"
+flask-testing = "*"
 
 [dev-packages]
 

@@ -1,4 +1,5 @@
 from flask import Flask, Blueprint, request, make_response, current_app
+from jwt.exceptions import ExpiredSignatureError, DecodeError, InvalidTokenError
 from functools import wraps
 from werkzeug.security import check_password_hash
 from app.db.entity import UserEntity
@@ -9,8 +10,7 @@ import jwt
 import logging
 logger = logging.basicConfig(level=logging.INFO)
 
-users_blueprint = Blueprint('users', __name__, url_prefix='/users'
-                                                          '')
+users_blueprint = Blueprint('users', __name__, url_prefix='/users')
 
 def configure_security(app: Flask) -> None:
     @users_blueprint.route('/login', methods=['POST'])
@@ -68,42 +68,61 @@ def configure_security(app: Flask) -> None:
     @users_blueprint.route('/refresh', methods=['POST'])
     def refresh():
         request_data = request.get_json()
-        refresh_token = request_data['token']
+        refresh_token = request_data.get('token')
 
-        decoded_refresh_token = jwt.decode(refresh_token, app.config['JWT_SECRET'], algorithms=[app.config['JWT_AUTHTYPE']])
+        if not refresh_token:
+            return make_response({'message': 'Token is missing'}, 400)
 
-        if decoded_refresh_token['access_token_exp'] < datetime.datetime.now(datetime.UTC).timestamp():
-            return make_response({'message': 'Cannot refresh token - access token has been expired'}, 401)
+        try:
+            decoded_refresh_token = jwt.decode(
+                refresh_token,
+                app.config['JWT_SECRET'],
+                algorithms=[app.config['JWT_AUTHTYPE']]
+            )
 
-        new_access_token_exp = int((datetime.datetime.now(datetime.UTC) + datetime.timedelta(minutes=app.config['JWT_ACCESS_MAX_AGE'])).timestamp())
-        access_token_payload = {
-            'iat': datetime.datetime.now(datetime.UTC),
-            'exp': new_access_token_exp,
-            'sub': str(decoded_refresh_token['sub']),
-            'role': decoded_refresh_token['role'],
-        }
+            if decoded_refresh_token['access_token_exp'] < datetime.datetime.now(datetime.UTC).timestamp():
+                return make_response({'message': 'Cannot refresh token - access token has been expired'}, 401)
 
-        refresh_token_payload = {
-            'iat': datetime.datetime.now(datetime.UTC),
-            'exp': decoded_refresh_token['exp'],
-            'sub': decoded_refresh_token['sub'],
-            'role': decoded_refresh_token['role'],
-            'access_token_exp': new_access_token_exp
-        }
+            new_access_token_exp = int((datetime.datetime.now(datetime.UTC) + datetime.timedelta(
+                minutes=app.config['JWT_ACCESS_MAX_AGE'])).timestamp())
 
-        access_token = jwt.encode(access_token_payload, app.config['JWT_SECRET'], algorithm=app.config['JWT_AUTHTYPE'])
-        refresh_token = jwt.encode(refresh_token_payload, app.config['JWT_SECRET'], algorithm=app.config['JWT_AUTHTYPE'])
+            access_token_payload = {
+                'iat': datetime.datetime.now(datetime.UTC),
+                'exp': new_access_token_exp,
+                'sub': str(decoded_refresh_token['sub']),
+                'role': decoded_refresh_token['role'],
+            }
 
-        response_body = {
-            'access_token': access_token,
-            'refresh_token': refresh_token
-        }
-        response = make_response(response_body, 201)
+            refresh_token_payload = {
+                'iat': datetime.datetime.now(datetime.UTC),
+                'exp': decoded_refresh_token['exp'],
+                'sub': decoded_refresh_token['sub'],
+                'role': decoded_refresh_token['role'],
+                'access_token_exp': new_access_token_exp
+            }
 
-        response.headers['Access-Token'] = access_token
-        response.headers['Refresh-Token'] = refresh_token
+            access_token = jwt.encode(access_token_payload, app.config['JWT_SECRET'],
+                                      algorithm=app.config['JWT_AUTHTYPE'])
+            refresh_token = jwt.encode(refresh_token_payload, app.config['JWT_SECRET'],
+                                       algorithm=app.config['JWT_AUTHTYPE'])
 
-        response.set_cookie('AccessToken', access_token, httponly=True)
-        response.set_cookie('RefreshToken', refresh_token, httponly=True)
+            response_body = {
+                'access_token': access_token,
+                'refresh_token': refresh_token
+            }
+            response = make_response(response_body, 201)
 
-        return response
+            response.headers['Access-Token'] = access_token
+            response.headers['Refresh-Token'] = refresh_token
+
+            response.set_cookie('AccessToken', access_token, httponly=True)
+            response.set_cookie('RefreshToken', refresh_token, httponly=True)
+
+            return response
+
+        except ExpiredSignatureError:
+            return make_response({'message': 'Cannot refresh token - refresh token has expired'}, 401)
+        except (DecodeError, InvalidTokenError):
+            return make_response({'message': 'Invalid refresh token'}, 401)
+        except Exception as e:
+            return make_response({'message': f'Unexpected error: {str(e)}'}, 500)
