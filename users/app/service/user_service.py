@@ -30,7 +30,7 @@ class UserService:
         user_entity = register_user_dto.with_password(
             generate_password_hash(register_user_dto.password)).to_user_entity()
         self.user_repository.save_or_update(user_entity)
-        client_entity = user_dto.to_client_entity(user_entity)
+        client_entity = user_dto.to_client_entity()
         self.client_repository.save_or_update(client_entity)
 
         timestamp = datetime.datetime.now(datetime.UTC) + datetime.timedelta(seconds=ACTIVATION_TOKEN_EXPIRATION_TIME_IN_SECONDS)
