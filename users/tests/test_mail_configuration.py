@@ -7,7 +7,6 @@ from app.mail.configuration import MailSender
 
 @pytest.fixture
 def app():
-    """Tworzy testową aplikację Flask"""
     app = Flask(__name__)
     app.config["TESTING"] = True
     app.config["MAIL_SERVER"] = "smtp.example.com"

@@ -24,7 +24,7 @@ logging.basicConfig(level=logging.INFO)
 class UserEntity(sa.Model):
     __tablename__ = 'users'
 
-    id_: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    id_: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     username: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
     password: Mapped[str] = mapped_column(String(512), nullable=False)
     email: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
@@ -47,7 +47,7 @@ class UserEntity(sa.Model):
 class ClientEntity(sa.Model):
     __tablename__ = 'client'
 
-    id_: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    id_: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     first_name: Mapped[str] = mapped_column(String(55), nullable=False)
     last_name: Mapped[str] = mapped_column(String(55), nullable=False)
     email: Mapped[str] = mapped_column(String(55), nullable=False, unique=True)
