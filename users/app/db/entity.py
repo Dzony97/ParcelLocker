@@ -52,8 +52,8 @@ class ClientEntity(sa.Model):
     last_name: Mapped[str] = mapped_column(String(55), nullable=False)
     email: Mapped[str] = mapped_column(String(55), nullable=False, unique=True)
     phone_number: Mapped[str] = mapped_column(sa.ForeignKey('users.phone_number'))
-    latitude: Mapped[float] = mapped_column(Float)
-    longitude: Mapped[float] = mapped_column(Float)
+    latitude: Mapped[float] = mapped_column(Float, nullable=True)
+    longitude: Mapped[float] = mapped_column(Float, nullable=True)
 
     user: Mapped[UserEntity] = sa.relationship('UserEntity', uselist=False)
 

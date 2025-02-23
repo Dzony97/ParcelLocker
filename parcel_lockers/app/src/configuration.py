@@ -1,11 +1,11 @@
-from parcel_lockers.app.src.database import MySQLConnectionManager
-from parcel_lockers.app.src.repository import (
+from app.src.database import MySQLConnectionManager
+from app.src.repository import (
     LockerRepository,
     ClientRepository,
     PackageRepository,
     ParcelLockerRepository,
 )
-from parcel_lockers.app.src.service import ParcelLockerService
+from app.src.service import ParcelLockerService
 
 
 def create_parcel_locker_service() -> ParcelLockerService:

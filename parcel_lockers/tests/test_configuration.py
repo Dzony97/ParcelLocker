@@ -1,5 +1,5 @@
 import pytest
-from parcel_lockers.app.src.configuration import create_parcel_locker_service
+from app.src.configuration import create_parcel_locker_service
 
 
 def test_create_parcel_locker_service():

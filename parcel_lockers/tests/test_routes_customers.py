@@ -1,6 +1,3 @@
-import pytest
-
-
 def test_get_clients_location_success(client):
     response = client.get("/clients/1")
     assert response.status_code == 200

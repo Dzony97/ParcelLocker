@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from flask import Blueprint, jsonify, Response
 from flask_pydantic import validate
-from parcel_lockers.app.src.configuration import create_parcel_locker_service
+from app.src.configuration import create_parcel_locker_service
 
 parcel_lockers_blueprint = Blueprint('parcel_lockers', __name__, url_prefix='/parcel_lockers')
 

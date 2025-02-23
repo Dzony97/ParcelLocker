@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, Response, make_response, Blueprint
-from parcel_lockers.app.src.configuration import create_parcel_locker_service
+from app.src.configuration import create_parcel_locker_service
 from flask_pydantic import validate
 from pydantic import BaseModel, Field
 

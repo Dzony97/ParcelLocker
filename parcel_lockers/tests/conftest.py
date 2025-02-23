@@ -3,9 +3,9 @@ import pytest
 from dotenv import load_dotenv
 
 load_dotenv('.env.test')
-from parcel_lockers.main import create_app
-from parcel_lockers.app.src.execute_sql_file import SqlFileExecutor
-from parcel_lockers.app.src.database import MySQLConnectionManager, with_db_connection
+from main import create_app
+from app.src.execute_sql_file import SqlFileExecutor
+from app.src.database import MySQLConnectionManager, with_db_connection
 
 
 @pytest.fixture(scope='module')

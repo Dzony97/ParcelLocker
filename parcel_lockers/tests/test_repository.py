@@ -1,5 +1,5 @@
-from parcel_lockers.app.src.entity import Package, ParcelLocker, Locker, Client
-from parcel_lockers.app.src.repository import ClientRepository, PackageRepository, LockerRepository, ParcelLockerRepository
+from app.src.entity import Package, ParcelLocker, Locker, Client
+from app.src.repository import ClientRepository, PackageRepository, LockerRepository, ParcelLockerRepository
 import pytest
 from datetime import datetime
 

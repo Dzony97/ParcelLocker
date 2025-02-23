@@ -1,7 +1,7 @@
 import pytest
-from parcel_lockers.app.src.service import ParcelLockerService
-from parcel_lockers.app.src.repository import LockerRepository, ClientRepository, PackageRepository, ParcelLockerRepository
-from parcel_lockers.app.src.entity import Size
+from app.src.service import ParcelLockerService
+from app.src.repository import LockerRepository, ClientRepository, PackageRepository, ParcelLockerRepository
+from app.src.entity import Size
 from datetime import datetime
 
 
