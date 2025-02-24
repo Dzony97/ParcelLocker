@@ -10,12 +10,12 @@ app = Flask(__name__)
 def create_app():
     load_dotenv()
 
-    app.config['JWT_ISSUER'] = os.getenv('JWT_ISSUER', 'km-programs.pl')
-    app.config['JWT_AUTHTYPE'] = os.getenv('JWT_AUTHTYPE', 'HS512')
-    app.config['JWT_SECRET'] = os.getenv('JWT_SECRET', '198272918yw89qwy89dsy98fyds89f8s')
-    app.config['JWT_ACCESS_MAX_AGE'] = int(os.getenv('JWT_ACCESS_MAX_AGE', '5'))
-    app.config['JWT_REFRESH_MAX_AGE'] = int(os.getenv('JWT_REFRESH_MAX_AGE', '5'))
-    app.config['JWT_PREFIX'] = os.getenv('JWT_PREFIX', 'Bearer')
+    app.config['JWT_ISSUER'] = os.getenv('JWT_ISSUER')
+    app.config['JWT_AUTHTYPE'] = os.getenv('JWT_AUTHTYPE')
+    app.config['JWT_SECRET'] = os.getenv('JWT_SECRET')
+    app.config['JWT_ACCESS_MAX_AGE'] = int(os.getenv('JWT_ACCESS_MAX_AGE'))
+    app.config['JWT_REFRESH_MAX_AGE'] = int(os.getenv('JWT_REFRESH_MAX_AGE'))
+    app.config['JWT_PREFIX'] = os.getenv('JWT_PREFIX')
 
     with app.app_context():
         @app.errorhandler(Exception)

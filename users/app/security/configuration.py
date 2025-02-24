@@ -12,6 +12,7 @@ logger = logging.basicConfig(level=logging.INFO)
 
 users_blueprint = Blueprint('users', __name__, url_prefix='/users')
 
+
 def configure_security(app: Flask) -> None:
     @users_blueprint.route('/login', methods=['POST'])
     def login():

@@ -6,13 +6,13 @@ name = "pypi"
 [packages]
 flask = "*"
 gunicorn = "*"
-httpx = "*"
 python-dotenv = "*"
 pyjwt = "*"
 pytest = "*"
 pytest-mock = "*"
 pytest-flask = "*"
 flask-testing = "*"
+httpx = "*"
 
 [dev-packages]
 

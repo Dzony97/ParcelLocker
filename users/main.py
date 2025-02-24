@@ -20,10 +20,13 @@ def create_app() -> Flask:
     app = Flask(__name__)
 
     with app.app_context():
+        @app.errorhandler(ValueError)
+        def handle_value_error(error: ValueError):
+            return {'message': str(error)}, 400
 
         @app.errorhandler(Exception)
-        def handle_error(error: Exception):
-            return {'message': str(error)}, 500
+        def handle_generic_error(error: Exception):
+            return {'message': 'Internal Server Error'}, 500
 
         app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
         app.config['SQLALCHEMY_ECHO'] = True
