@@ -17,7 +17,6 @@ def proxy_users(subpath):
         url=target_url,
         headers=forwarded_headers,
         content=request.get_data(),
-        cookies=request.cookies,
         follow_redirects=False
     )
-    return (resp.content, resp.status_code, resp.headers.items())
+    return resp.content, resp.status_code, resp.headers.items()

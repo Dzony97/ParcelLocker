@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock
+
 from flask import Flask, request, Blueprint
 from security.authorize import authorize
 import httpx
@@ -20,10 +22,9 @@ def proxy_clients_get(client_id):
         url=target_url,
         headers=forwarded_headers,
         content=request.get_data(),
-        cookies=request.cookies,
         follow_redirects=False
     )
-    return (resp.content, resp.status_code, resp.headers.items())
+    return resp.content, resp.status_code, resp.headers.items()
 
 
 @packages_blueprint.route('', methods=['POST'])
@@ -39,10 +40,9 @@ def proxy_packages_post():
         url=target_url,
         headers=forwarded_headers,
         content=request.get_data(),
-        cookies=request.cookies,
         follow_redirects=False
     )
-    return (resp.content, resp.status_code, resp.headers.items())
+    return resp.content, resp.status_code, resp.headers.items()
 
 
 @packages_blueprint.route('/<int:package_id>', methods=['PUT'])
@@ -58,10 +58,9 @@ def proxy_packages_put(package_id):
         url=target_url,
         headers=forwarded_headers,
         content=request.get_data(),
-        cookies=request.cookies,
         follow_redirects=False
     )
-    return (resp.content, resp.status_code, resp.headers.items())
+    return resp.content, resp.status_code, resp.headers.items()
 
 
 @parcel_lockers_blueprint.route('/parcel_locker', methods=['POST'])
@@ -77,10 +76,9 @@ def proxy_add_parcel_locker():
         url=target_url,
         headers=forwarded_headers,
         content=request.get_data(),
-        cookies=request.cookies,
         follow_redirects=False
     )
-    return (resp.content, resp.status_code, resp.headers.items())
+    return resp.content, resp.status_code, resp.headers.items()
 
 
 @parcel_lockers_blueprint.route('/locker', methods=['POST'])
@@ -96,7 +94,7 @@ def proxy_add_locker():
         url=target_url,
         headers=forwarded_headers,
         content=request.get_data(),
-        cookies=request.cookies,
         follow_redirects=False
     )
-    return (resp.content, resp.status_code, resp.headers.items())
+    return resp.content, resp.status_code, resp.headers.items()
+
