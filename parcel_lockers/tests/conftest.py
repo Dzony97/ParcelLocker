@@ -11,13 +11,12 @@ from app.src.database import MySQLConnectionManager, with_db_connection
 @pytest.fixture(scope='module')
 def connection_manager() -> MySQLConnectionManager:
     """
-    Fixture that sets up the MySQL connection manager for testing.
+    Provides a MySQL connection manager for testing.
 
-    It loads the necessary environment variables for connecting to the database
-    and returns an instance of `MySQLConnectionManager` that manages the
-    database connection pool.
+    This fixture initializes the database connection manager using test-specific
+    environment variables to ensure isolation from the production database.
 
-    :return: An instance of `MySQLConnectionManager` used for database connections.
+    :return: A `MySQLConnectionManager` instance for database connections.
     """
     os.environ['DB_HOST'] = 'localhost'
     os.environ['DB_PORT'] = '3308'
@@ -31,13 +30,12 @@ def connection_manager() -> MySQLConnectionManager:
 @pytest.fixture(scope='module', autouse=True)
 def setup_database_schema(connection_manager) -> None:
     """
-    Fixture to set up the database schema for testing.
+    Sets up the test database schema.
 
-    This fixture automatically runs before the tests start. It initializes the
-    database schema by executing the SQL file `schema.sql`, which should
-    contain the required structure (tables, relations, etc.) for the tests.
+    This fixture executes the `schema.sql` file to initialize the required database
+    structure before the tests run.
 
-    :param connection_manager: The connection manager used to interact with the database.
+    :param connection_manager: The database connection manager used to execute the schema setup.
     """
     executor = SqlFileExecutor(connection_manager)
     executor.execute_sql_file(os.path.join(os.path.dirname(__file__), '../app/sql/schema.sql'))
@@ -45,6 +43,13 @@ def setup_database_schema(connection_manager) -> None:
 
 @pytest.fixture(scope='session')
 def app():
+    """
+    Creates and configures the Flask application for testing.
+
+    The application is set to testing mode to enable easier assertions and debugging.
+
+    :return: A Flask application instance.
+    """
     test_app = create_app()
     test_app.config['TESTING'] = True
     with test_app.app_context():
@@ -53,4 +58,12 @@ def app():
 
 @pytest.fixture
 def client(app):
+    """
+    Provides a test client for the Flask application.
+
+    The test client allows simulating HTTP requests without running a real server.
+
+    :param app: The Flask application instance.
+    :return: A Flask test client instance.
+    """
     return app.test_client()

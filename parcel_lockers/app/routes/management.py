@@ -25,6 +25,12 @@ class AddLockerRequestModel(BaseModel):
 @parcel_lockers_blueprint.route('/parcel_locker', methods=['POST'])
 @validate()
 def add_parcel_locker_route(body: AddParcelLockerRequestModel) -> Response:
+    """
+    Route to add a new parcel locker to the system.
+
+    :param body: The request body containing city, postal_code, latitude, and longitude for the new parcel locker.
+    :return: A JSON response with the new parcel locker ID or an error message.
+    """
     try:
         city = body.city
         postal_code = body.postal_code
@@ -47,6 +53,12 @@ def add_parcel_locker_route(body: AddParcelLockerRequestModel) -> Response:
 @parcel_lockers_blueprint.route('/locker', methods=['POST'])
 @validate()
 def add_locker_route(body: AddLockerRequestModel) -> Response:
+    """
+    Route to add a new locker to an existing parcel locker.
+
+    :param body: The request body containing parcel_locker_id, package_id, client_id, size, and status.
+    :return: A JSON response with the new locker details or an error message.
+    """
     try:
         parcel_locker_id = body.parcel_locker_id
         package_id = body.package_id

@@ -12,6 +12,14 @@ import jwt
 
 @pytest.fixture
 def app():
+    """
+    Fixture to create and return a Flask application instance with registered blueprints.
+
+    This fixture sets up a Flask app and registers the blueprints for users, clients, packages,
+    and parcel lockers to be used in the tests.
+
+    :return: A Flask app instance with registered blueprints.
+    """
     app = Flask(__name__)
     app.register_blueprint(users_blueprint)
     app.register_blueprint(clients_blueprint)
@@ -22,11 +30,29 @@ def app():
 
 @pytest.fixture
 def client(app: Flask) -> FlaskClient:
+    """
+    Fixture to create a test client for the Flask app.
+
+    This fixture provides a test client that can be used to simulate HTTP requests
+    to the Flask app for testing purposes.
+
+    :param app: The Flask application instance.
+    :return: A FlaskClient instance that allows for HTTP requests during tests.
+    """
     return app.test_client()
 
 
 @pytest.fixture
 def mock_jwt_token(mocker):
+    """
+    Fixture to mock the JWT token used for authorization in tests.
+
+    This fixture generates a mock JWT token with the "admin" role and patches the Flask
+    app's configuration to simulate the environment variables for JWT configuration.
+
+    :param mocker: The mocking object used to patch the app's configuration.
+    :return: A JWT token string used for authorization in tests.
+    """
     jwt_secret = "test_secret"
     jwt_algorithm = "HS256"
     token_payload = {"role": "admin"}
@@ -59,6 +85,16 @@ def mock_jwt_token(mocker):
 
 
 def test_proxy_users(client, mocker):
+    """
+    Test case for proxying a request to the users route.
+
+    This test mocks the response from an external service and ensures that the Flask
+    app returns the mocked response data and status code when accessing the `/users/some-path` route.
+
+    :param client: The Flask test client.
+    :param mocker: The mocking object used to mock the external request.
+    :return: None
+    """
     mock_response = MagicMock()
     mock_response.status_code = 200
     mock_response.content = b"Mocked Response"
@@ -74,6 +110,18 @@ def test_proxy_users(client, mocker):
 
 
 def test_proxy_clients_get(client, mocker, mock_jwt_token):
+    """
+    Test case for proxying a GET request to the clients route with a valid JWT token.
+
+    This test mocks the response from an external service and ensures that the Flask
+    app returns the mocked response data and status code when accessing the `/clients/1` route
+    with a valid JWT token.
+
+    :param client: The Flask test client.
+    :param mocker: The mocking object used to mock the external request.
+    :param mock_jwt_token: The mocked JWT token for authorization.
+    :return: None
+    """
     mock_response = MagicMock()
     mock_response.status_code = 200
     mock_response.content = b'{"client_id": 1, "name": "Test Client"}'
@@ -89,6 +137,18 @@ def test_proxy_clients_get(client, mocker, mock_jwt_token):
 
 
 def test_proxy_packages_post_success(client, mocker, mock_jwt_token):
+    """
+    Test case for proxying a POST request to the packages route with a valid JWT token.
+
+    This test mocks the response from an external service and ensures that the Flask
+    app returns the mocked response data and status code when posting data to the `/packages` route
+    with a valid JWT token.
+
+    :param client: The Flask test client.
+    :param mocker: The mocking object used to mock the external request.
+    :param mock_jwt_token: The mocked JWT token for authorization.
+    :return: None
+    """
     mock_response = MagicMock()
     mock_response.status_code = 200
     mock_response.content = b'{"message": "success"}'
@@ -104,6 +164,18 @@ def test_proxy_packages_post_success(client, mocker, mock_jwt_token):
 
 
 def test_proxy_packages_put_success(client, mocker, mock_jwt_token):
+    """
+    Test case for proxying a PUT request to the packages route with a valid JWT token.
+
+    This test mocks the response from an external service and ensures that the Flask
+    app returns the mocked response data and status code when updating a package at `/packages/{package_id}`
+    with a valid JWT token.
+
+    :param client: The Flask test client.
+    :param mocker: The mocking object used to mock the external request.
+    :param mock_jwt_token: The mocked JWT token for authorization.
+    :return: None
+    """
     mock_response = MagicMock()
     mock_response.status_code = 200
     mock_response.content = b'{"message": "success"}'
@@ -122,6 +194,18 @@ def test_proxy_packages_put_success(client, mocker, mock_jwt_token):
 
 
 def test_proxy_add_parcel_locker(client, mocker, mock_jwt_token):
+    """
+    Test case for proxying a POST request to add a parcel locker with a valid JWT token.
+
+    This test mocks the response from an external service and ensures that the Flask
+    app returns the mocked response data and status code when posting data to the `/parcel_lockers/parcel_locker`
+    route with a valid JWT token.
+
+    :param client: The Flask test client.
+    :param mocker: The mocking object used to mock the external request.
+    :param mock_jwt_token: The mocked JWT token for authorization.
+    :return: None
+    """
     mock_response = MagicMock()
     mock_response.status_code = 200
     mock_response.content = b'{"message": "Parcel locker added successfully"}'
@@ -139,6 +223,18 @@ def test_proxy_add_parcel_locker(client, mocker, mock_jwt_token):
 
 
 def test_proxy_add_locker(client, mocker, mock_jwt_token):
+    """
+    Test case for proxying a POST request to add a locker with a valid JWT token.
+
+    This test mocks the response from an external service and ensures that the Flask
+    app returns the mocked response data and status code when posting data to the `/parcel_lockers/locker`
+    route with a valid JWT token.
+
+    :param client: The Flask test client.
+    :param mocker: The mocking object used to mock the external request.
+    :param mock_jwt_token: The mocked JWT token for authorization.
+    :return: None
+    """
     mock_response = MagicMock()
     mock_response.status_code = 200
     mock_response.content = b'{"message": "Locker added successfully"}'
@@ -153,11 +249,3 @@ def test_proxy_add_locker(client, mocker, mock_jwt_token):
     assert response.status_code == 200
     assert response.data == b'{"message": "Locker added successfully"}'
     assert response.headers["Content-Type"] == "application/json"
-
-
-
-
-
-
-
-

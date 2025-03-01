@@ -14,8 +14,25 @@ users_blueprint = Blueprint('users', __name__, url_prefix='/users')
 
 
 def configure_security(app: Flask) -> None:
+    """
+    Configures security-related routes for user authentication, including login and token refresh.
+
+    Args:
+        app (Flask): The Flask application instance.
+    """
+
     @users_blueprint.route('/login', methods=['POST'])
     def login():
+        """
+        Handles user login by verifying username and password and issuing JWT tokens.
+
+        POST body:
+            - username (str): The username of the user.
+            - password (str): The password of the user.
+
+        Returns:
+            Response: A response containing access and refresh tokens if authentication is successful.
+        """
         data = request.get_json()
         username = data['username']
         password = data['password']
@@ -68,6 +85,15 @@ def configure_security(app: Flask) -> None:
 
     @users_blueprint.route('/refresh', methods=['POST'])
     def refresh():
+        """
+        Handles refreshing of the access token using a valid refresh token.
+
+        POST body:
+            - token (str): The refresh token provided by the user.
+
+        Returns:
+            Response: A response containing new access and refresh tokens if the refresh token is valid.
+        """
         request_data = request.get_json()
         refresh_token = request_data.get('token')
 

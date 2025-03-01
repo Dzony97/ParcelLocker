@@ -9,6 +9,11 @@ from app.src.service import ParcelLockerService
 
 
 def create_parcel_locker_service() -> ParcelLockerService:
+    """
+    Creates and returns an instance of ParcelLockerService with initialized repositories.
+
+    :return: An instance of ParcelLockerService.
+    """
     connection_manager = MySQLConnectionManager()
     locker_repo = LockerRepository(connection_manager)
     client_repo = ClientRepository(connection_manager)
