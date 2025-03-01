@@ -13,13 +13,13 @@ pytest-mock = "*"
 pytest-flask = "*"
 flask-testing = "*"
 sqlalchemy = "*"
-flask-sqlalchemy = "*"
-flask-migrate = "*"
 flask-mail = "*"
 pyjwt = "*"
 pydantic = "*"
 pytest-cov = "*"
 flask-restful = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
 
 [dev-packages]
 

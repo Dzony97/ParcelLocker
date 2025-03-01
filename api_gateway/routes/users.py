@@ -7,6 +7,12 @@ users_blueprint = Blueprint('users', __name__, url_prefix='/users')
 
 @users_blueprint.route("/<path:subpath>", methods=["GET", "POST"])
 def proxy_users(subpath):
+    """
+    Proxies GET and POST requests to the users service.
+
+    :param subpath: The subpath of the request to be forwarded.
+    :return: The response from the proxied request.
+    """
     target_url = f"http://users-nginx:82/users/{subpath}"
     forwarded_headers = {
         k: v for k, v in request.headers if k.lower() != "host"

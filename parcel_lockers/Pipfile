@@ -23,9 +23,9 @@ pytest-mock = "*"
 
 [dev-packages]
 pytest = "*"
-pytest-cov = "*"
 testcontainers = "*"
 mypy = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.13"

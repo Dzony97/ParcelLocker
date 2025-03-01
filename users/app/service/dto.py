@@ -87,12 +87,13 @@ class UserDto:
             user_entity.role
         )
 
-    def to_client_entity(self) -> ClientEntity:
+    @classmethod
+    def to_client_entity(cls, user_entity: UserEntity) -> ClientEntity:
         return ClientEntity(
-            first_name=self.first_name,
-            last_name=self.last_name,
-            email=self.email,
-            phone_number=self.phone_number,
+            first_name=user_entity.first_name,
+            last_name=user_entity.last_name,
+            email=user_entity.email,
+            phone_number=user_entity.phone_number,
             latitude=None,
             longitude=None
         )

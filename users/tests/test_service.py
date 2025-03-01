@@ -23,6 +23,26 @@ def user_service(mock_user_repository, mock_client_repository, mock_activation_t
     return UserService(mock_user_repository, mock_client_repository, mock_activation_token_repository)
 
 
+def test_user_dto_to_client_entity():
+    user_entity = UserEntity(
+        id_=1,
+        username="testuser",
+        email="test@example.com",
+        phone_number="123456789",
+        first_name="Test",
+        last_name="User",
+        role="user"
+    )
+    user_dto = UserDto.from_user_entity(user_entity)
+
+    client_entity = user_dto.to_client_entity(user_entity)
+
+    assert client_entity.first_name == "Test"
+    assert client_entity.last_name == "User"
+    assert client_entity.email == "test@example.com"
+    assert client_entity.phone_number == "123456789"
+
+
 def test_register_user_success(user_service, mock_user_repository, mock_client_repository, mock_activation_token_repository):
     register_dto = RegisterUserDto(
         username="testuser",
