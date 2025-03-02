@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Optional
-from flask import Blueprint, jsonify, Response
+from flask import Blueprint, jsonify, Response, make_response
 from flask_pydantic import validate
 from app.src.configuration import create_parcel_locker_service
 
@@ -44,10 +44,12 @@ def add_parcel_locker_route(body: AddParcelLockerRequestModel) -> Response:
             longitude=longitude
         )
 
-        return jsonify({'new_parcel_locker_id': new_parcel_locker_id}), 201
+        response = make_response(jsonify({'new_parcel_locker_id': new_parcel_locker_id}), 201)
+        return response
 
     except Exception as e:
-        return jsonify({'message': f'An unexpected error occurred: {str(e)}'}), 500
+        response = make_response(jsonify({'message': f'An unexpected error occurred: {str(e)}'}), 500)
+        return response
 
 
 @parcel_lockers_blueprint.route('/locker', methods=['POST'])
@@ -74,8 +76,9 @@ def add_locker_route(body: AddLockerRequestModel) -> Response:
             size=size,
             status=status
         )
-
-        return jsonify({'new_locker': new_locker}), 201
+        response = make_response(jsonify({'new_locker': new_locker}), 201)
+        return response
 
     except Exception as e:
-        return jsonify({'message': f'An unexpected error occurred: {str(e)}'}), 500
+        response = make_response(jsonify({'message': f'An unexpected error occurred: {str(e)}'}), 500)
+        return response

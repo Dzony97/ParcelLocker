@@ -17,6 +17,7 @@ pydantic = "*"
 flask-restful = "*"
 flask-sqlalchemy = "*"
 flask-migrate = "*"
+mypy = "*"
 
 [dev-packages]
 mypy = "*"

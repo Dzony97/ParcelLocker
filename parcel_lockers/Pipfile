@@ -18,6 +18,7 @@ mysqlclient = "*"
 pyjwt = "*"
 python-dotenv = "*"
 pydantic = "*"
+mypy = "*"
 
 [dev-packages]
 mypy = "*"
@@ -25,7 +26,6 @@ pytest = "*"
 pytest-cov = "*"
 pytest-mock = "*"
 testcontainers = "*"
-
 
 [requires]
 python_version = "3.13"

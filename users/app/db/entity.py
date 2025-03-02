@@ -104,7 +104,7 @@ class ClientEntity(sa.Model):
         """
         return f'CLIENT ENTITY: {self.id_}, {self.first_name} {self.last_name}'
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
         Returns a formal string representation of the ClientEntity instance.
         """
