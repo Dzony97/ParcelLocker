@@ -1,14 +1,15 @@
 import logging
 import jwt
 from functools import wraps
-from flask import request, current_app, make_response
-
+from flask import request, current_app, make_response, Response
+import re
+from typing import Callable
 import logging
 
 logging.basicConfig(level=logging.INFO)
 
 
-def authorize(roles: list[str] | None = None):
+def authorize(roles: list[str] | None = None) -> Callable[[Callable[..., Response]], Callable[..., Response]]:
     """
     Decorator to enforce authorization based on JWT token and optional role-based access control.
 
@@ -19,7 +20,7 @@ def authorize(roles: list[str] | None = None):
     :return: The decorated function is only called if authorization is successful, otherwise, an error response is returned.
     """
 
-    def decorator(f):
+    def decorator(f: Callable[..., Response]) -> Callable[..., Response]:
         """
         The actual decorator that wraps the route handler function.
 
@@ -32,7 +33,7 @@ def authorize(roles: list[str] | None = None):
         """
 
         @wraps(f)
-        def decorated_function(*args, **kwargs):
+        def decorated_function(*args, **kwargs) -> Response:
             """
             This function is responsible for handling the incoming request and performing the
             authorization checks before calling the wrapped route handler.

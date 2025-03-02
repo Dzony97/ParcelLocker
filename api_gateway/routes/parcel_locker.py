@@ -1,4 +1,4 @@
-from flask import Flask, request, Blueprint
+from flask import Flask, request, Blueprint, Response, make_response
 from security.authorize import authorize
 import httpx
 
@@ -9,7 +9,7 @@ parcel_lockers_blueprint = Blueprint('parcel_lockers', __name__, url_prefix='/pa
 
 @clients_blueprint.route('/<int:client_id>')
 @authorize(['admin', 'user'])
-def proxy_clients_get(client_id):
+def proxy_clients_get(client_id: int) -> Response:
     """
     Proxies GET requests to the clients endpoint.
 
@@ -28,12 +28,12 @@ def proxy_clients_get(client_id):
         content=request.get_data(),
         follow_redirects=False
     )
-    return resp.content, resp.status_code, resp.headers.items()
+    return make_response(resp.content, resp.status_code, dict(resp.headers))
 
 
 @packages_blueprint.route('', methods=['POST'])
 @authorize(['admin', 'user'])
-def proxy_packages_post():
+def proxy_packages_post() -> Response:
     """
     Proxies POST requests to the packages endpoint.
 
@@ -51,12 +51,12 @@ def proxy_packages_post():
         content=request.get_data(),
         follow_redirects=False
     )
-    return resp.content, resp.status_code, resp.headers.items()
+    return make_response(resp.content, resp.status_code, dict(resp.headers))
 
 
 @packages_blueprint.route('/<int:package_id>', methods=['PUT'])
 @authorize(['admin', 'user'])
-def proxy_packages_put(package_id):
+def proxy_packages_put(package_id: int) -> Response:
     """
     Proxies PUT requests to update a package.
 
@@ -75,12 +75,12 @@ def proxy_packages_put(package_id):
         content=request.get_data(),
         follow_redirects=False
     )
-    return resp.content, resp.status_code, resp.headers.items()
+    return make_response(resp.content, resp.status_code, dict(resp.headers))
 
 
 @parcel_lockers_blueprint.route('/parcel_locker', methods=['POST'])
 @authorize(['admin'])
-def proxy_add_parcel_locker():
+def proxy_add_parcel_locker() -> Response:
     """
     Proxies POST requests to add a new parcel locker.
 
@@ -98,12 +98,12 @@ def proxy_add_parcel_locker():
         content=request.get_data(),
         follow_redirects=False
     )
-    return resp.content, resp.status_code, resp.headers.items()
+    return make_response(resp.content, resp.status_code, dict(resp.headers))
 
 
 @parcel_lockers_blueprint.route('/locker', methods=['POST'])
 @authorize(['admin'])
-def proxy_add_locker():
+def proxy_add_locker() -> Response:
     """
     Proxies POST requests to add a new locker to a parcel locker.
 
@@ -121,6 +121,6 @@ def proxy_add_locker():
         content=request.get_data(),
         follow_redirects=False
     )
-    return resp.content, resp.status_code, resp.headers.items()
+    return make_response(resp.content, resp.status_code, dict(resp.headers))
 
 

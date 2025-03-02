@@ -4,28 +4,28 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-mysql-connector-python = "*"
-python-dotenv = "*"
-inflection = "*"
 flask = "*"
-gunicorn = "*"
+flask-cors = "*"
+flask-mail = "*"
+flask-migrate = "*"
 flask-pydantic = "*"
 flask-restful = "*"
 flask-sqlalchemy = "*"
+gunicorn = "*"
+inflection = "*"
+mysql-connector-python = "*"
 mysqlclient = "*"
 pyjwt = "*"
-flask-migrate = "*"
-flask-mail = "*"
-flask-cors = "*"
+python-dotenv = "*"
 pydantic = "*"
-pytest = "*"
-pytest-mock = "*"
 
 [dev-packages]
-pytest = "*"
-testcontainers = "*"
 mypy = "*"
+pytest = "*"
 pytest-cov = "*"
+pytest-mock = "*"
+testcontainers = "*"
+
 
 [requires]
 python_version = "3.13"

@@ -8,13 +8,17 @@ flask = "*"
 gunicorn = "*"
 python-dotenv = "*"
 pyjwt = "*"
-pytest = "*"
-pytest-mock = "*"
 pytest-flask = "*"
 flask-testing = "*"
 httpx = "*"
+mypy = "*"
 
 [dev-packages]
+mypy = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+testcontainers = "*"
 
 [requires]
 python_version = "3.13"

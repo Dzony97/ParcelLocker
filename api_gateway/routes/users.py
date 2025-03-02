@@ -1,4 +1,4 @@
-from flask import Flask, request, Blueprint
+from flask import Flask, request, Blueprint, Response, make_response
 from security.authorize import authorize
 import httpx
 
@@ -6,7 +6,7 @@ users_blueprint = Blueprint('users', __name__, url_prefix='/users')
 
 
 @users_blueprint.route("/<path:subpath>", methods=["GET", "POST"])
-def proxy_users(subpath):
+def proxy_users(subpath: str) -> Response:
     """
     Proxies GET and POST requests to the users service.
 
@@ -25,4 +25,4 @@ def proxy_users(subpath):
         content=request.get_data(),
         follow_redirects=False
     )
-    return resp.content, resp.status_code, resp.headers.items()
+    return make_response(resp.content, resp.status_code, dict(resp.headers))
